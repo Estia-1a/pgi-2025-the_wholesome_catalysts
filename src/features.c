@@ -16,5 +16,6 @@ void helloWorld() {
 }
 
 void dimension (char *source_path){
-    
+    unsigned char *data;
 }
+
