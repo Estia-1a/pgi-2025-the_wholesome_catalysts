@@ -15,18 +15,6 @@ void helloWorld() {
     printf("Hello World !");
 }
 
-typedef struct TSimage
-{
-  int h, w;
-  unsigned char * data;
-  /* pixels are stored as 3 bytes, in Red Green Blue order */
-} TSimage;
-typedef struct TSimage * Timage;
-
-typedef struct TSimage
-{
-  int h, w;
-  unsigned char * data;
-  /* pixels are stored as 3 bytes, in Red Green Blue order */
-} TSimage;
-typedef struct TSimage * Timage;
+void dimension (char *source_path){
+    
+}
