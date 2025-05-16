@@ -15,12 +15,10 @@ void helloWorld() {
     printf("Hello World !");
 }
 
-void dimension(char *source_path) {
-    unsigned char *data;
-    int width, height, channels;
-    if (read_image_data(source_path, &data, &width, &height, &channels) == 0) {
-        printf("dimension: %d, %d\n", width, height);
-    } else {
-        fprintf(stderr, "Error: Unable to read image data.\n");
-    }
-}
+typedef struct TSimage
+{
+  int h, w;
+  unsigned char * data;
+  /* pixels are stored as 3 bytes, in Red Green Blue order */
+} TSimage;
+typedef struct TSimage * Timage;
