@@ -15,7 +15,12 @@ void helloWorld() {
     printf("Hello World !");
 }
 
-void dimension (char *source_path){
+void dimension(char *source_path) {
     unsigned char *data;
+    int width, height, channels;
+    if (read_image_data(source_path, &data, &width, &height, &channels) == 0) {
+        printf("dimension: %d, %d\n", width, height);
+    } else {
+        fprintf(stderr, "Error: Unable to read image data.\n");
+    }
 }
-
