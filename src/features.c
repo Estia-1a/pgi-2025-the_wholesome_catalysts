@@ -1,6 +1,6 @@
 #include <estia-image.h>
 #include <stdio.h>
-
+#include<stdlib.h>
 #include "features.h"
 #include "utils.h"
 
@@ -27,8 +27,16 @@ void dimension (char *source_path){
     
     if (result > 0){
 
-        printf("dimension de l'image est : %d, %d\n", width, height);
+        printf("dimension: %d, %d\n", width, height);
     }
     return ;
+
+}
+
+void first_pixel (char *source_path){
+    int width, height, channel_count;
+    unsigned char* data;
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+    printf("first_pixel: %d, %d, %d",data[0],data[1],data[2]);
 }
 
