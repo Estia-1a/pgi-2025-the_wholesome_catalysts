@@ -17,17 +17,19 @@ void helloWorld() {
 }
 
 void dimension (char *source_path){
-    unsigned char *data = NULL;
-    int width = 0;
+
+    unsigned char* data;
+
+    int width =0;
     int height = 0;
-    int chanel_count =0;
+    int channel_count = 0;
+    
+    int result = read_image_data(source_path, &data, &width, &height, &channel_count);
+    
+    if (result > 0){
 
-    if (read_image_data(source_path, &data, &width, &height, &chanel_count)){
-        printf("dimension: %d, %d\n", width, height);
+        printf("dimension de l'image est : %d, %d\n", width, height);
     }
-    else {
-        printf("erreur");
-    }
+    return ;
 }
-
 
