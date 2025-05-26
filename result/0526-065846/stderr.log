@@ -1,0 +1,7 @@
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c: In function ‘main’:
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:41:9: warning: ‘return’ with no value, in function returning non-void
+   41 |         return;
+      |         ^~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:12:5: note: declared here
+   12 | int main(int argc, char **argv) {
+      |     ^~~~
