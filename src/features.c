@@ -76,7 +76,7 @@ void second_line(char *source_path){
 /* #21 */
 
 void print_pixel( char *filename, int x, int y ){       
-
+   
 
 
 
