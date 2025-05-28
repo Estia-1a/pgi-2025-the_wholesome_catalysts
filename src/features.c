@@ -81,7 +81,7 @@ void second_line(char *source_path)
     unsigned char G = data[indice_pixel + 1];
     unsigned char B = data[indice_pixel + 2];
 
-    printf("tenth_pixel: %d, %d, %d", R, G, B);
+    printf("second_line : %d, %d, %d", R, G, B);
 }
 
 /* #21 */
