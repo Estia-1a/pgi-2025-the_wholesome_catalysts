@@ -44,3 +44,30 @@ void first_pixel (char *source_path){
     printf("first_pixel: %d, %d, %d",R,G,B);
 }
 
+void second_line(char *source_path) {
+    int width, height, channels;
+    unsigned char *data;
+    
+
+    int result = read_image_data(source_path, &data, &width, &height, &channels);
+    
+    if (result != 0) {
+        printf("Error: Failed to read image data from %s (error code: %d)\n", source_path, result);
+        return;
+    }
+    
+    if (height < 2) {
+        printf("Error: Image must have at least 2 pixels height\n");
+
+        return;
+    }
+    
+    int pixel_index = 3 * width;
+    
+    unsigned char R = data[pixel_index];     
+    unsigned char G = data[pixel_index + 1]; 
+    unsigned char B = data[pixel_index + 2]; 
+    
+    printf("second_line: %d, %d, %d\n", R, G, B);
+    
+}
