@@ -106,6 +106,24 @@ void min_pixel (char *filename){
 /* 18 */
 
 void max_component(char *filename, char component){
+int width, height, channels;
+unsigned char *data;
+
+int dim_result = get_image_dimensions(filename, &width, &height);
+
+channels = 3;
+
+data = (unsigned char*)malloc(width * height * channels);
+
+int result = read_image_data(filename, data, width, height, channels);
+
+int max_value = 0;
+
+
+
+
+
+
 
 
 
