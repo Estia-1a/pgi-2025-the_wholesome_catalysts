@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 
   if ( strncmp( configuration.command, "print_pixel", 11 ) == 0 ) {
     /* print_pixel() function is defined in feature.h and implemented in feature.c */
-    print_pixel( configuration.filenames[0] ,0,0);
+    print_pixel( configuration.filenames[0] ,0,0); /*il faut changer les ,0,0*/
   }
 
   if ( strncmp( configuration.command, "max_pixel", 9 ) == 0 ) {
