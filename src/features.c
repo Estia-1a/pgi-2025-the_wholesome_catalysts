@@ -37,10 +37,27 @@ void first_pixel (char *source_path){
     unsigned char* data;
 
     read_image_data(source_path, &data, &width, &height, &channel_count);
-    
+
     unsigned char R = data[0];
     unsigned char G = data[1];
     unsigned char B = data[2];
     printf("first_pixel: %d, %d, %d",R,G,B);
+}
+
+void tenth_pixel (char *source_path){
+    int width, height, channel_count;
+    unsigned char* data;
+
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+
+    int ligne_pixel = 9;                    /*pixel de la 10eme ligne */
+    int indice_pixel = ligne_pixel * 3;     /*Chaque pixel est composé de 3 bytes*/
+    
+    unsigned char R = data[indice_pixel];
+    unsigned char G = data[indice_pixel + 1];
+    unsigned char B = data[indice_pixel + 2];
+
+    printf("tenth_pixel: %d, %d, %d",R,G,B);
+
 }
 
