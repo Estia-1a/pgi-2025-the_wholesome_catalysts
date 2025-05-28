@@ -43,4 +43,3 @@ void first_pixel (char *source_path){
     unsigned char B = data[2];
     printf("first_pixel: %d, %d, %d",R,G,B);
 }
-deuxieme branche ?
