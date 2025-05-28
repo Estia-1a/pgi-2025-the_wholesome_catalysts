@@ -1,0 +1,28 @@
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c: In function ‘print_pixel’:
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c:8:23: error: ‘NULL’ undeclared (first use in this function)
+    8 |     pixelRGB *pixel = NULL ;
+      |                       ^~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c:4:1: note: ‘NULL’ is defined in header ‘<stddef.h>’; did you forget to ‘#include <stddef.h>’?
+    3 | #include "utils.h"
+  +++ |+#include <stddef.h>
+    4 | 
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c:8:23: note: each undeclared identifier is reported only once for each function it appears in
+    8 |     pixelRGB *pixel = NULL ;
+      |                       ^~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c:9:2: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+    9 |  printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
+      |  ^~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c:4:1: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+    3 | #include "utils.h"
+  +++ |+#include <stdio.h>
+    4 | 
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c:9:2: warning: incompatible implicit declaration of built-in function ‘printf’ [-Wbuiltin-declaration-mismatch]
+    9 |  printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
+      |  ^~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/utils.c:9:2: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+gmake[2]: *** [CMakeFiles/freud.dir/build.make:121: CMakeFiles/freud.dir/src/utils.c.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+gmake[1]: *** [CMakeFiles/Makefile2:87: CMakeFiles/freud.dir/all] Error 2
+gmake: *** [Makefile:136: all] Error 2
+
+The process '/usr/local/bin/cmake' failed with exit code 2
