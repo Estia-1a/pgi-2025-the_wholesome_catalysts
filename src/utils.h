@@ -17,3 +17,5 @@ typedef struct _pixelRGB {
 
 
 #endif
+
+void print_pixel(char *filename, int x, int y);
