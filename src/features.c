@@ -84,11 +84,10 @@ void second_line(char *source_path)
     printf("second_line : %d, %d, %d", R, G, B);
 }
 
-/* #21 */
 
-void print_pixel(char *filename, int x, int y)
-{
-}
+
+
+
 
 /* #20 */
 void max_pixel(char *filename)
