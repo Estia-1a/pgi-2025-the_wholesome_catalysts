@@ -1,0 +1,68 @@
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/features.c:108:6: error: conflicting types for ‘max_component’; have ‘void(char *, char)’
+  108 | void max_component(char *filename, char component){
+      |      ^~~~~~~~~~~~~
+In file included from /home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/features.c:3:
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/features.h:13:6: note: previous declaration of ‘max_component’ with type ‘void(char *)’
+   13 | void max_component (char *filename); /*18*/
+      |      ^~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/features.c:114:6: error: conflicting types for ‘min_component’; have ‘void(char *, char)’
+  114 | void min_component(char *filename, char component){
+      |      ^~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/features.h:14:6: note: previous declaration of ‘min_component’ with type ‘void(char *)’
+   14 | void min_component (char *filename); /*17*/
+      |      ^~~~~~~~~~~~~
+gmake[2]: *** [CMakeFiles/freud.dir/build.make:93: CMakeFiles/freud.dir/src/features.c.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c: In function ‘main’:
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:82:5: warning: implicit declaration of function ‘stat_report’ [-Wimplicit-function-declaration]
+   82 |     stat_report( configuration.filenames[0] );
+      |     ^~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:87:5: warning: implicit declaration of function ‘color_red’ [-Wimplicit-function-declaration]
+   87 |     color_red( configuration.filenames[0] );
+      |     ^~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:92:5: warning: implicit declaration of function ‘color_green’ [-Wimplicit-function-declaration]
+   92 |     color_green( configuration.filenames[0] );
+      |     ^~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:97:5: warning: implicit declaration of function ‘color_blue’ [-Wimplicit-function-declaration]
+   97 |     color_blue( configuration.filenames[0] );
+      |     ^~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:102:5: warning: implicit declaration of function ‘color_gray’ [-Wimplicit-function-declaration]
+  102 |     color_gray( configuration.filenames[0] );
+      |     ^~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:107:5: warning: implicit declaration of function ‘invert’ [-Wimplicit-function-declaration]
+  107 |     invert( configuration.filenames[0] );
+      |     ^~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:112:5: warning: implicit declaration of function ‘color_gray_luminance’ [-Wimplicit-function-declaration]
+  112 |     color_gray_luminance( configuration.filenames[0] );
+      |     ^~~~~~~~~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:117:5: warning: implicit declaration of function ‘rotate_cw’ [-Wimplicit-function-declaration]
+  117 |     rotate_cw( configuration.filenames[0] );
+      |     ^~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:122:5: warning: implicit declaration of function ‘rotate_acw’ [-Wimplicit-function-declaration]
+  122 |     rotate_acw( configuration.filenames[0] );
+      |     ^~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:127:5: warning: implicit declaration of function ‘mirror_horizontal’ [-Wimplicit-function-declaration]
+  127 |     mirror_horizontal( configuration.filenames[0] );
+      |     ^~~~~~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:132:5: warning: implicit declaration of function ‘mirror_vertical’ [-Wimplicit-function-declaration]
+  132 |     mirror_vertical( configuration.filenames[0] );
+      |     ^~~~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:137:5: warning: implicit declaration of function ‘mirror_total’ [-Wimplicit-function-declaration]
+  137 |     mirror_total( configuration.filenames[0] );
+      |     ^~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:142:5: warning: implicit declaration of function ‘scale_crop’ [-Wimplicit-function-declaration]
+  142 |     scale_crop( configuration.filenames[0] );
+      |     ^~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:147:5: warning: implicit declaration of function ‘scale_nearest’ [-Wimplicit-function-declaration]
+  147 |     scale_nearest( configuration.filenames[0] );
+      |     ^~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:152:5: warning: implicit declaration of function ‘scale_bilinear’ [-Wimplicit-function-declaration]
+  152 |     scale_bilinear( configuration.filenames[0] );
+      |     ^~~~~~~~~~~~~~
+/home/runner/work/pgi-2025-the_wholesome_catalysts/pgi-2025-the_wholesome_catalysts/src/main.c:157:5: warning: implicit declaration of function ‘color_desaturate’ [-Wimplicit-function-declaration]
+  157 |     color_desaturate( configuration.filenames[0] );
+      |     ^~~~~~~~~~~~~~~~
+gmake[1]: *** [CMakeFiles/Makefile2:87: CMakeFiles/freud.dir/all] Error 2
+gmake: *** [Makefile:136: all] Error 2
+
+The process '/usr/local/bin/cmake' failed with exit code 2
