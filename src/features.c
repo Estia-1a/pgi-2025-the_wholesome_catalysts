@@ -37,9 +37,12 @@ void first_pixel (char *source_path){
     unsigned char* data;
 
     read_image_data(source_path, &data, &width, &height, &channel_count);
-    
+
     unsigned char R = data[0];
     unsigned char G = data[1];
     unsigned char B = data[2];
     printf("first_pixel: %d, %d, %d",R,G,B);
 }
+
+
+
