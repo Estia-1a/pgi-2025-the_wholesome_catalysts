@@ -61,3 +61,58 @@ void tenth_pixel (char *source_path){
 
 }
 
+/* #22 */
+
+void second_line(char *source_path){            
+
+
+
+
+
+
+
+}
+
+/* #21 */
+
+void print_pixel( char *filename, int x, int y ){       
+
+
+
+
+
+
+
+}
+
+/* #20 */
+void max_pixel (char *filename){
+
+
+
+
+
+}
+
+/* 19 */
+
+void min_pixel (char *filename){
+
+
+
+
+}
+
+/* 18 */
+
+void max_component(char *filename, char component){
+
+
+
+}
+
+void min_component(char *filename, char component){
+
+
+    
+}
