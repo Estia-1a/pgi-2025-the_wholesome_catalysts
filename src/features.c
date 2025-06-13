@@ -90,8 +90,46 @@ void second_line(char *source_path)
 
 
 /* #20 */
-void max_pixel(char *filename)
+void max_pixel(char *source_path)
 {
+    int width, height, channels;
+    unsigned char *data;
+
+    if (read_image_data(source_path, &data, &width, &height, &channels) <= 0)
+    {
+        printf("Erreur lors de la lecture de l'image.\n");
+        return;
+    }
+
+    int max_total = -1;
+    int best_x = 0, best_y = 0;
+    unsigned char best_r = 0, best_g = 0, best_b = 0;
+
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            int pixel_index = (y * width + x) * channels;
+
+            unsigned char r = data[pixel_index];
+            unsigned char g = data[pixel_index + 1];
+            unsigned char b = data[pixel_index + 2];
+
+            int rgb_sum = r + g + b;
+
+            if (rgb_sum > max_total)
+            {
+                max_total = rgb_sum;
+                best_x = x;
+                best_y = y;
+                best_r = r;
+                best_g = g;
+                best_b = b;
+            }
+        }
+    }
+
+    printf("max_pixel (%d, %d): %d, %d, %d\n", best_x, best_y, best_r, best_g, best_b);
 }
 
 /* 19 */
