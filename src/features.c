@@ -484,9 +484,51 @@ void color_gray_luminance(char *source_path)
      write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
-void rotate_cw(char *filename)
+void rotate_cw(char *source_path)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+
+    if (channel_count < 3) {
+        printf("Image must have at least 3 channels\n");
+        free(data);
+        return;
+    }
+
+    int new_width = height;
+    int new_height = width;
+
+    unsigned char *rotated_data = malloc(new_width * new_height * channel_count);
+    if (!rotated_data) {
+        printf("Memory allocation failed\n");
+        free(data);
+        return;
+    }
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int src_index = (y * width + x) * channel_count;
+            int dst_x = height - 1 - y;
+            int dst_y = x;
+            int dst_index = (dst_y * new_width + dst_x) * channel_count;
+
+            for (int c = 0; c < channel_count; c++) {
+                rotated_data[dst_index + c] = data[src_index + c];
+            }
+        }
+    }
+
+
+    write_image_data("image_out.bmp", rotated_data, new_width, new_height);
+
+    free(data);
+    free(rotated_data);
+
+    printf("Image rotated 90° clockwise and saved as image_out.bmp\n");
 }
+
 void rotate_acw(char *filename)
 {
 }
