@@ -397,9 +397,7 @@ void color_green(char *source_path)
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
-void color_green(char *filename)
-{
-}
+
 void color_blue(char *filename)
 {
 }
