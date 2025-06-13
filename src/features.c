@@ -74,9 +74,9 @@ void second_line(char *source_path)
 
     read_image_data(source_path, &data, &width, &height, &channel_count);
 
-    int ligne = 1;                                    /* seconde ligne (index 1) */
-    int colonne = 0;                                  /* premier pixel de la ligne */
-    int indice_pixel = (ligne * width + colonne) * 3; /* Calcul correct de l'indice */
+    int ligne = 1;                                    
+    int colonne = 0;                                  
+    int indice_pixel = (ligne * width + colonne) * 3; 
 
     unsigned char R = data[indice_pixel];
     unsigned char G = data[indice_pixel + 1];
@@ -87,18 +87,18 @@ void second_line(char *source_path)
 
 
 void print_pixel(char *source_path, int x, int y) {
-    unsigned char *data;
-    int width, height, channel_count;
-    pixelRGB *pixel = NULL;  
+    unsigned char *data = NULL;
+    int width, height, nb_cannaux;
+    pixelRGB *pixel = NULL;
 
-    if (read_image_data(source_path, &data, &width, &height, &channel_count)){
-        pixel = get_pixel(data, width, height, channel_count, x, y);
-    }
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);
+    
+    pixel = get_pixel(data, width, height, nb_cannaux, x, y);
 
-    if (pixel != NULL){
+    if (pixel != NULL) {
         printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
     }
-    return;
+
     free(data);
 }
 
@@ -163,7 +163,7 @@ void min_pixel(char *source_path)
         return;
     }
 
-    int somme_min = 256 * 3 + 1; // valeur plus haute que toute somme RGB possible
+    int somme_min = 256 * 3 + 1; 
     int coord_x_min = 0, coord_y_min = 0;
     unsigned char r_min = 0, g_min = 0, b_min = 0;
 
@@ -239,6 +239,8 @@ print_result:
     free(data);
 }
 
+/*#17*/
+
 void min_component(char *source_path, char *component)
 {
     int width, height, channel_count;
@@ -282,18 +284,16 @@ print_result:
     free(data);
 }
 
-void stat_report(char *filename)
+
+
+/*#16*/
+
+void stat_report(char *source_path)
 {
     int width, height, channel_count;
     unsigned char *data;
     
-    // Lire les données de l'image
-    int result = read_image_data(filename, &data, &width, &height, &channel_count);
-    
-    if (result <= 0) {
-        printf("Erreur lors de la lecture de l'image\n");
-        return;
-    }
+    read_image_data(source_path, &data, &width, &height, &channel_count);
     
     // Initialiser les variables de statistiques
     unsigned char max_pixel = 0;
@@ -303,18 +303,18 @@ void stat_report(char *filename)
     
     // Parcourir tous les pixels
     for (int i = 0; i < width * height; i++) {
-        int pixel_index = i * 3;  // Chaque pixel = 3 bytes (RGB)
+        int pixel_index = i * 3; 
         
         unsigned char r = data[pixel_index];
         unsigned char g = data[pixel_index + 1];
         unsigned char b = data[pixel_index + 2];
         
-        // Calculer l'intensité du pixel (luminance)
-        unsigned char intensity = (unsigned char)(0.299 * r + 0.587 * g + 0.114 * b);
+        // Calcul de la luminance
+        unsigned char luminance = (unsigned char)(0.299 * r + 0.587 * g + 0.114 * b);
         
         // Mettre à jour les statistiques globales
-        if (intensity > max_pixel) max_pixel = intensity;
-        if (intensity < min_pixel) min_pixel = intensity;
+        if (luminance > max_pixel) max_pixel = luminance;
+        if (luminance < min_pixel) min_pixel = luminance;
         
         // Mettre à jour les statistiques par composante
         if (r > max_r) max_r = r;
@@ -327,20 +327,16 @@ void stat_report(char *filename)
         if (b < min_b) min_b = b;
     }
     
-    // Créer le nom du fichier de sortie
+    // Création du fichier
     char output_filename[256];
-    snprintf(output_filename, sizeof(output_filename), "%s_stats.txt", filename);
+    snprintf(output_filename, sizeof(output_filename), "%s_stats.txt", source_path);
     
     // Écrire les statistiques dans le fichier
     FILE *output_file = fopen(output_filename, "w");
-    if (output_file == NULL) {
-        printf("Erreur lors de la création du fichier de sortie\n");
-        return;
-    }
     
     fprintf(output_file, "Rapport de statistiques de l'image\n");
     fprintf(output_file, "==================================\n");
-    fprintf(output_file, "Image: %s\n", filename);
+    fprintf(output_file, "Image: %s\n", source_path);
     fprintf(output_file, "Dimensions: %d x %d pixels\n", width, height);
     fprintf(output_file, "Total pixels: %d\n\n", width * height);
     
@@ -358,9 +354,12 @@ void stat_report(char *filename)
     
     fclose(output_file);
     
-    printf("Rapport de statistiques écrit dans: %s\n", output_filename) ;
+    printf("Le rapport des statistiques est dans: %s\n", output_filename) ;
 
 }
+
+/*#15*/
+
 void color_red(char *source_path)
 {
     int largeur, hauteur, nb_canaux;
@@ -369,96 +368,125 @@ void color_red(char *source_path)
     read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
     for (int i = 0; i < largeur * hauteur; i++) {
-        int pixel_index = i * 3;
+        int compteur = i * 3;
         
-        donnee[pixel_index + 1] = 0;  // vert = 0
-        donnee[pixel_index + 2] = 0;  // Bleu = 0
+        donnee[compteur + 1] = 0;  // vert = 0
+        donnee[compteur + 2] = 0;  // Bleu = 0
     }
     
     
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
+
+/*#14*/
 
 void color_green(char *source_path)
 {
     int largeur, hauteur, nb_canaux;
     unsigned char *donnee;
     
-    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
     
     for (int i = 0; i < largeur * hauteur; i++) {
-        int pixel = i * 3;
+        int compteur = i * 3;
         
-        donnee[pixel] = 0;  // Rouge = 0
-        donnee[pixel + 2] = 0;  // Bleu = 0
+        donnee[compteur] = 0;  // Rouge = 0
+        donnee[compteur + 2] = 0;  // Bleu = 0
     }
     
     
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
-void color_green(char *source_path)
+/*#13*/
+
+void color_blue(char *source_path)
 {
-}
-void color_blue(char *filename)
-{
-}
-void color_gray(char *filename)
-{
-}
-void invert(char *filename)
-{
-}
-void color_gray_luminance(char *filename)
-{
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
+    
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int compteur = i * 3;
+        
+        donnee[compteur] = 0;  // Rouge = 0
+        donnee[compteur + 1] = 0;  // Vert = 0
+    }
+    
+    
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
-void rotate_cw(char *source_path)
+/*#12*/
+
+void color_gray(char *source_path) {    
+    int width, height, nb_cannaux;    
+    unsigned char *data;    
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);      
+    for (int i = 0; i < width * height; i++) {        
+        int pixel_index = i * 3;        
+        unsigned char r = data[pixel_index];        
+        unsigned char g = data[pixel_index + 1];        
+        unsigned char b = data[pixel_index + 2];          
+        unsigned char gray = (r + g + b) / 3;        
+        data[pixel_index] = gray;     // R = gray        
+        data[pixel_index + 1] = gray; // G = gray        
+        data[pixel_index + 2] = gray; // B = gray  
+    }
+ 
+    write_image_data("image_out.bmp", data, width, height);
+}
+
+/*#11*/
+
+void invert(char *source_path)
 {
     int width, height, channel_count;
     unsigned char *data;
-
     read_image_data(source_path, &data, &width, &height, &channel_count);
-
-    if (channel_count < 3) {
-        printf("Image must have at least 3 channels\n");
-        free(data);
-        return;
+    // Parcourir tous les pixels et inverser les couleurs
+    for (int i = 0; i < width * height; i++) {
+        int pixel_index = i * 3;
+        // Inverser chaque composante : nouvelle_valeur = 255 - ancienne_valeur
+        data[pixel_index] = 255 - data[pixel_index];         // R inversé
+        data[pixel_index + 1] = 255 - data[pixel_index + 1]; // G inversé
+        data[pixel_index + 2] = 255 - data[pixel_index + 2]; // B inversé
     }
-
-    int new_width = height;
-    int new_height = width;
-
-    unsigned char *rotated_data = malloc(new_width * new_height * channel_count);
-    if (!rotated_data) {
-        printf("Memory allocation failed\n");
-        free(data);
-        return;
-    }
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            int src_index = (y * width + x) * channel_count;
-            int dst_x = height - 1 - y;
-            int dst_y = x;
-            int dst_index = (dst_y * new_width + dst_x) * channel_count;
-
-            for (int c = 0; c < channel_count; c++) {
-                rotated_data[dst_index + c] = data[src_index + c];
-            }
-        }
-    }
-
-
-    write_image_data("image_out.bmp", rotated_data, new_width, new_height);
-
-    free(data);
-    free(rotated_data);
-
-    printf("Image rotated 90° clockwise and saved as image_out.bmp\n");
+    // Sauvegarder l'image modifiée
+    write_image_data("image_out.bmp", data, width, height);
 }
 
+/*#10*/
 
+void color_gray_luminance(char *source_path)
+{
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
+    
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
+    
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int compteur = i * 3;
+        
+        unsigned char r = donnee[compteur];
+        unsigned char g = donnee[compteur + 1];
+        unsigned char b = donnee[compteur + 2];
+        
+        
+        unsigned char luminance = 0.21 * r + 0.72 * g + 0.07 * b;
+        
+        donnee[compteur] = luminance;    
+        donnee[compteur + 1] = luminance; 
+        donnee[compteur + 2] = luminance; 
+    }
+     write_image_data("image_out.bmp", donnee, largeur, hauteur);
+}
+
+void rotate_cw(char *filename)
+{
+}
 void rotate_acw(char *filename)
 {
 }

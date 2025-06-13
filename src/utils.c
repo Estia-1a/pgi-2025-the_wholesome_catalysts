@@ -2,15 +2,8 @@
 
 #include "utils.h"
 
-pixelRGB * get_pixel(unsigned char* data, const unsigned int width, const unsigned int height, const unsigned int n, const unsigned int x, const unsigned int y) {
-    if (!data || x >= width || y >= height) {
-        return NULL;
-    }
+pixelRGB * get_pixel(unsigned char* data, const unsigned int x, const unsigned int width, const unsigned int y, const unsigned int height, const unsigned int i) {
 
-    // Calcul de l'index dans le tableau de données
-    // Chaque pixel contient n composantes (ex: 3 pour RGB)
-    unsigned int index = (y * width + x) * n;
-
-    // On retourne l'adresse de pixelRGB dans le tableau data
+    unsigned int index = (y * width + x) * i;
     return (pixelRGB*) &data[index];
 }
