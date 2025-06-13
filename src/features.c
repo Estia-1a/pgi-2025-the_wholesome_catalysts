@@ -74,9 +74,9 @@ void second_line(char *source_path)
 
     read_image_data(source_path, &data, &width, &height, &channel_count);
 
-    int ligne = 1;                                    /* seconde ligne (index 1) */
-    int colonne = 0;                                  /* premier pixel de la ligne */
-    int indice_pixel = (ligne * width + colonne) * 3; /* Calcul correct de l'indice */
+    int ligne = 1;                                    
+    int colonne = 0;                                  
+    int indice_pixel = (ligne * width + colonne) * 3; 
 
     unsigned char R = data[indice_pixel];
     unsigned char G = data[indice_pixel + 1];
@@ -163,7 +163,7 @@ void min_pixel(char *source_path)
         return;
     }
 
-    int somme_min = 256 * 3 + 1; // valeur plus haute que toute somme RGB possible
+    int somme_min = 256 * 3 + 1; 
     int coord_x_min = 0, coord_y_min = 0;
     unsigned char r_min = 0, g_min = 0, b_min = 0;
 
