@@ -91,15 +91,15 @@ void print_pixel(char *source_path, int x, int y) {
     int width, height, nb_cannaux;
     pixelRGB *pixel = NULL;
 
-    if (read_image_data(source_path, &data, &width, &height, &nb_cannaux)) {
-        pixel = get_pixel(data, width, height, nb_cannaux, x, y);
-        if (pixel != NULL) {
-            printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
-        } else {
-            printf("Coordinates (%d, %d) out of range or data is NULL.\n", x, y);
-        }
-        free(data);
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);
+    
+    pixel = get_pixel(data, width, height, nb_cannaux, x, y);
+
+    if (pixel != NULL) {
+        printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
     }
+
+    free(data);
 }
 
 
