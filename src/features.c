@@ -190,7 +190,7 @@ void min_pixel(char *source_path)
         }
     }
 
-    printf("min_pixel (%d, %d): %d, %d, %d\n", coord_x_min, coord_y_min, r_min, g_min, b_min);
+    printf("min_pixel (%d, %d): %d, %d, %d\n", coord_x_min, coord_y_min, r_min, g_min, b_min)  ;
 }
 
 
