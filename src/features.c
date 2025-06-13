@@ -418,19 +418,19 @@ void color_blue(char *source_path)
 void color_gray(char *source_path) {    
     int width, height, nb_cannaux;    
     unsigned char *data;    
-    read_image_data(source_path, &data, &width, &height, &nb_cannaux);    // Parcourir tous les pixels et calculer la moyenne RGB    
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);      
     for (int i = 0; i < width * height; i++) {        
         int pixel_index = i * 3;        
         unsigned char r = data[pixel_index];        
         unsigned char g = data[pixel_index + 1];        
-        unsigned char b = data[pixel_index + 2];        // Calculer la moyenne des composantes RGB        
-        unsigned char gray = (r + g + b) / 3;        // Appliquer la même valeur grise à R, G et B        
+        unsigned char b = data[pixel_index + 2];          
+        unsigned char gray = (r + g + b) / 3;        
         data[pixel_index] = gray;     // R = gray        
         data[pixel_index + 1] = gray; // G = gray        
         data[pixel_index + 2] = gray; // B = gray  
     }
       
-    // Sauvegarder l'image modifiée   
+ 
     write_image_data("image_out.bmp", data, width, height);
 }
 void invert(char *filename)
