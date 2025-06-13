@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "features.h"
 #include "utils.h"
+#include <stdlib.h>
 
 /**
  * @brief Here, you have to code features of the project.
@@ -195,9 +196,47 @@ void min_pixel(char *source_path)
 
 
 /* 18 */
-
-void max_component(char *filename)
+void max_component(char *source_path, char *component)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+
+    if (channel_count < 3) {
+        printf("Image must have at least 3 channels (R, G, B)\n");
+        return;
+    }
+
+    int max_value = -1;
+    int max_x = 0;
+    int max_y = 0;
+
+    int index = 0;
+    char c = component[0];
+    int component_offset = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            index = (y * width + x) * channel_count;
+            int value = data[index + component_offset];
+
+            if (value > max_value) {
+                max_value = value;
+                max_x = x;
+                max_y = y;
+
+                if (max_value == 255) { // valeur max possible
+                    goto print_result;
+                }
+            }
+        }
+    }
+
+print_result:
+    printf("max_component %c (%d, %d): %d\n", c, max_x, max_y, max_value);
+
+    free(data);
 }
 
 void min_component(char *filename)
