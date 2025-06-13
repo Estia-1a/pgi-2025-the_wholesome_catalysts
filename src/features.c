@@ -319,7 +319,7 @@ void stat_report(char *filename)
     
     fclose(output_file);
     
-    printf("Rapport de statistiques écrit dans: %s\n", output_filename);
+    printf("Rapport de statistiques écrit dans: %s\n", output_filename) ;
 
 }
 void color_red(char *source_path)
