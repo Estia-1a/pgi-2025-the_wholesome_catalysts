@@ -13,4 +13,4 @@ pixelRGB * get_pixel(unsigned char* data, const unsigned int width, const unsign
 
     // On retourne l'adresse de pixelRGB dans le tableau data
     return (pixelRGB*) &data[index];
-   
+}
