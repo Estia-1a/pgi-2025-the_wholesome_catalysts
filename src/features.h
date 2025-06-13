@@ -14,12 +14,12 @@ void max_component (char *source_path, char *component); /*18*/
 void min_component (char *source_path, char *component); /*17*/
 void stat_report(char * filename);
 void color_red(char * filename);
-void color_green(char * filename);
+void color_green(char * source_path);
 void color_blue(char * filename);
 void color_gray(char * filename);
 void invert(char * filename);
 void color_gray_luminance(char * filename);
-void rotate_cw(char * filename);
+void rotate_cw(char * source_path);
 void rotate_acw(char * filename);
 void mirror_horizontal(char * filename);
 void mirror_vertical(char * filename);
