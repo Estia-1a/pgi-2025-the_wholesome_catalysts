@@ -322,9 +322,24 @@ void stat_report(char *filename)
     printf("Rapport de statistiques écrit dans: %s\n", output_filename) ;
 
 }
-void color_red(char *filename)
+void color_red(char *source_path)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+    
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+    
+    for (int i = 0; i < width * height; i++) {
+        int pixel_index = i * 3;
+        
+        data[pixel_index + 1] = 0;  // vert = 0
+        data[pixel_index + 2] = 0;  // Bleu = 0
+    }
+    
+    // Enregistrement de l'image
+    write_image_data("image_out.bmp", data, width, height);
 }
+
 void color_green(char *filename)
 {
 }
