@@ -442,18 +442,18 @@ void color_gray(char *source_path) {
 
 void invert(char *source_path)
 {
-    int width, height, channel_count;
+    int width, height, nb_cannaux;
     unsigned char *data;
-    read_image_data(source_path, &data, &width, &height, &channel_count);
-    // Parcourir tous les pixels et inverser les couleurs
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);
+
     for (int i = 0; i < width * height; i++) {
         int pixel_index = i * 3;
-        // Inverser chaque composante : nouvelle_valeur = 255 - ancienne_valeur
+
         data[pixel_index] = 255 - data[pixel_index];         // R inversé
         data[pixel_index + 1] = 255 - data[pixel_index + 1]; // G inversé
         data[pixel_index + 2] = 255 - data[pixel_index + 2]; // B inversé
     }
-    // Sauvegarder l'image modifiée
+
     write_image_data("image_out.bmp", data, width, height);
 }
 
