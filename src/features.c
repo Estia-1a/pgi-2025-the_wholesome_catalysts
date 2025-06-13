@@ -226,7 +226,7 @@ void max_component(char *source_path, char *component)
                 max_x = x;
                 max_y = y;
 
-                if (max_value == 255) { // valeur max possible
+                if (max_value == 255) { 
                     goto print_result;
                 }
             }
@@ -239,8 +239,47 @@ print_result:
     free(data);
 }
 
-void min_component(char *filename)
+void min_component(char *source_path, char *component)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+
+    if (channel_count < 3) {
+        printf("Image must have at least 3 channels (R, G, B)\n");
+        return;
+    }
+
+    int min_value = 256;
+    int min_x = 0;
+    int min_y = 0;
+
+    int index = 0;
+    char c = component[0];
+    int component_offset = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            index = (y * width + x) * channel_count;
+            int value = data[index + component_offset];
+
+            if (value < min_value) {
+                min_value = value;
+                min_x = x;
+                min_y = y;
+
+                if (min_value == 0) { 
+                    goto print_result;
+                }
+            }
+        }
+    }
+
+print_result:
+    printf("min_component %c (%d, %d): %d\n", c, min_x, min_y, min_value);
+
+    free(data);
 }
 
 void stat_report(char *filename)
