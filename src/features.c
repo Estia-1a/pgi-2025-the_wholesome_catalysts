@@ -342,16 +342,16 @@ void color_red(char *source_path)
 
 void color_green(char *source_path)
 {
-    int width, height, channel_count;
-    unsigned char *data;
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
     
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
-    for (int i = 0; i < width * height; i++) {
+    for (int i = 0; i < largeur * hauteur; i++) {
         int pixel = i * 3;
         
-        data[pixel] = 0;  // Rouge = 0
-        data[pixel + 2] = 0;  // Bleu = 0
+        donnee[pixel] = 0;  // Rouge = 0
+        donnee[pixel + 2] = 0;  // Bleu = 0
     }
     
     
