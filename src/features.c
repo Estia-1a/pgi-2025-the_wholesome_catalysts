@@ -357,8 +357,22 @@ void color_green(char *source_path)
     // Enregistrement de l'image
     write_image_data("image_out.bmp", data, width, height);
 }
-void color_blue(char *filename)
+void color_blue(char *source_path)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+    
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+    
+    for (int i = 0; i < width * height; i++) {
+        int pixel = i * 3;
+        
+        data[pixel] = 0;  // Rouge = 0
+        data[pixel + 1] = 0;  // Vert = 0
+    }
+    
+    // Enregistrement de l'image
+    write_image_data("image_out.bmp", data, width, height);
 }
 void color_gray(char *filename)
 {
