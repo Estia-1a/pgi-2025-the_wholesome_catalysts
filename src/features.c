@@ -345,7 +345,7 @@ void color_green(char *source_path)
     int largeur, hauteur, nb_canaux;
     unsigned char *donnee;
     
-    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
     
     for (int i = 0; i < largeur * hauteur; i++) {
         int pixel = i * 3;
