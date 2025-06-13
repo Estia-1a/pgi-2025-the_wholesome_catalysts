@@ -380,9 +380,32 @@ void color_gray(char *filename)
 void invert(char *filename)
 {
 }
-void color_gray_luminance(char *filename)
+void color_gray_luminance(char *source_path)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+    
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+    
+    // Parcourir tous les pixels et calculer la luminosité
+    for (int i = 0; i < width * height; i++) {
+        int pixel_index = i * 3;
+        
+        unsigned char r = data[pixel_index];
+        unsigned char g = data[pixel_index + 1];
+        unsigned char b = data[pixel_index + 2];
+        
+        // Calculer la luminosité avec les coefficients donnés
+        unsigned char luminance = 0.21 * r + 0.72 * g + 0.07 * b;
+        
+        // Appliquer la même valeur de luminance à R, G et B
+        data[pixel_index] = luminance;     // R = luminance
+        data[pixel_index + 1] = luminance; // G = luminance
+        data[pixel_index + 2] = luminance; // B = luminance
+    }
+     write_image_data("image_out.bmp", data, width, height);
 }
+
 void rotate_cw(char *filename)
 {
 }
