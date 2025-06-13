@@ -369,10 +369,10 @@ void color_red(char *source_path)
     read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
     for (int i = 0; i < largeur * hauteur; i++) {
-        int pixel_index = i * 3;
+        int compteur = i * 3;
         
-        donnee[pixel_index + 1] = 0;  // vert = 0
-        donnee[pixel_index + 2] = 0;  // Bleu = 0
+        donnee[compteur + 1] = 0;  // vert = 0
+        donnee[compteur + 2] = 0;  // Bleu = 0
     }
     
     
@@ -387,10 +387,10 @@ void color_green(char *source_path)
     read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
     
     for (int i = 0; i < largeur * hauteur; i++) {
-        int pixel = i * 3;
+        int compteur = i * 3;
         
-        donnee[pixel] = 0;  // Rouge = 0
-        donnee[pixel + 2] = 0;  // Bleu = 0
+        donnee[compteur] = 0;  // Rouge = 0
+        donnee[compteur + 2] = 0;  // Bleu = 0
     }
     
     
@@ -398,8 +398,22 @@ void color_green(char *source_path)
 }
 
 
-void color_blue(char *filename)
+void color_blue(char *source_path)
 {
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
+    
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int compteur = i * 3;
+        
+        donnee[compteur] = 0;  // Rouge = 0
+        donnee[compteur + 1] = 0;  // Vert = 0
+    }
+    
+    
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 void color_gray(char *source_path) {    
     int width, height, nb_cannaux;    
@@ -424,28 +438,27 @@ void invert(char *filename)
 }
 void color_gray_luminance(char *source_path)
 {
-    int width, height, channel_count;
-    unsigned char *data;
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
     
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
-    // Parcourir tous les pixels et calculer la luminosité
-    for (int i = 0; i < width * height; i++) {
-        int pixel_index = i * 3;
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int compteur = i * 3;
         
-        unsigned char r = data[pixel_index];
-        unsigned char g = data[pixel_index + 1];
-        unsigned char b = data[pixel_index + 2];
+        unsigned char r = donnee[compteur];
+        unsigned char g = donnee[compteur + 1];
+        unsigned char b = donnee[compteur + 2];
         
-        // Calculer la luminosité avec les coefficients donnés
+        
         unsigned char luminance = 0.21 * r + 0.72 * g + 0.07 * b;
         
-        // Appliquer la même valeur de luminance à R, G et B
-        data[pixel_index] = luminance;     // R = luminance
-        data[pixel_index + 1] = luminance; // G = luminance
-        data[pixel_index + 2] = luminance; // B = luminance
+        donnee[compteur] = luminance;    
+        donnee[compteur + 1] = luminance; 
+        donnee[compteur + 2] = luminance; 
     }
-     write_image_data("image_out.bmp", data, width, height);
+     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
 void rotate_cw(char *filename)
