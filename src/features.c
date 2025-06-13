@@ -340,6 +340,24 @@ void color_red(char *source_path)
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
+void color_green(char *source_path)
+{
+    int width, height, channel_count;
+    unsigned char *data;
+    
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+    
+    for (int i = 0; i < width * height; i++) {
+        int pixel = i * 3;
+        
+        data[pixel] = 0;  // Rouge = 0
+        data[pixel + 2] = 0;  // Bleu = 0
+    }
+    
+    
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
+}
+
 void color_green(char *filename)
 {
 }
