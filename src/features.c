@@ -191,7 +191,7 @@ void min_pixel(char *source_path)
         }
     }
 
-    printf("min_pixel (%d, %d): %d, %d, %d\n", coord_x_min, coord_y_min, r_min, g_min, b_min);
+    printf("min_pixel (%d, %d): %d, %d, %d\n", coord_x_min, coord_y_min, r_min, g_min, b_min)  ;
 }
 
 
@@ -358,12 +358,45 @@ void stat_report(char *filename)
     
     fclose(output_file);
     
-    printf("Rapport de statistiques écrit dans: %s\n", output_filename);
+    printf("Rapport de statistiques écrit dans: %s\n", output_filename) ;
 
 }
-void color_red(char *filename)
+void color_red(char *source_path)
 {
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
+    
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int pixel_index = i * 3;
+        
+        donnee[pixel_index + 1] = 0;  // vert = 0
+        donnee[pixel_index + 2] = 0;  // Bleu = 0
+    }
+    
+    
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
+
+void color_green(char *source_path)
+{
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
+    
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int pixel = i * 3;
+        
+        donnee[pixel] = 0;  // Rouge = 0
+        donnee[pixel + 2] = 0;  // Bleu = 0
+    }
+    
+    
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
+}
+
 void color_green(char *filename)
 {
 }
