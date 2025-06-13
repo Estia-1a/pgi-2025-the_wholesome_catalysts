@@ -87,20 +87,19 @@ void second_line(char *source_path)
 
 
 void print_pixel(char *source_path, int x, int y) {
-    unsigned char *data;
-    int width, height, nb_canneaux;
-    pixelRGB *pixel = NULL;  
+    unsigned char *data = NULL;
+    int width, height, nb_cannaux;
+    pixelRGB *pixel = NULL;
 
-    read_image_data(source_path, &data, &width, &height, &nb_canneaux);
-
-    pixelRGB *pixel = get_pixel(data, width, height, nb_canneaux, x, y);
-
-    if (pixel != NULL){
-        printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
+    if (read_image_data(source_path, &data, &width, &height, &nb_cannaux)) {
+        pixel = get_pixel(data, width, height, nb_cannaux, x, y);
+        if (pixel != NULL) {
+            printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
+        } else {
+            printf("Coordinates (%d, %d) out of range or data is NULL.\n", x, y);
+        }
+        free(data);
     }
-    
-    
-    free(data);
 }
 
 
@@ -227,7 +226,7 @@ void max_component(char *source_path, char *component)
                 max_x = x;
                 max_y = y;
 
-                if (max_value == 255) { // valeur max possible
+                if (max_value == 255) { 
                     goto print_result;
                 }
             }
@@ -240,8 +239,47 @@ print_result:
     free(data);
 }
 
-void min_component(char *filename)
+void min_component(char *source_path, char *component)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+
+    if (channel_count < 3) {
+        printf("Image must have at least 3 channels (R, G, B)\n");
+        return;
+    }
+
+    int min_value = 256;
+    int min_x = 0;
+    int min_y = 0;
+
+    int index = 0;
+    char c = component[0];
+    int component_offset = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            index = (y * width + x) * channel_count;
+            int value = data[index + component_offset];
+
+            if (value < min_value) {
+                min_value = value;
+                min_x = x;
+                min_y = y;
+
+                if (min_value == 0) { 
+                    goto print_result;
+                }
+            }
+        }
+    }
+
+print_result:
+    printf("min_component %c (%d, %d): %d\n", c, min_x, min_y, min_value);
+
+    free(data);
 }
 
 void stat_report(char *filename)
@@ -325,25 +363,41 @@ void stat_report(char *filename)
 }
 void color_red(char *source_path)
 {
-    int width, height, channel_count;
-    unsigned char *data;
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
     
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
-    for (int i = 0; i < width * height; i++) {
+    for (int i = 0; i < largeur * hauteur; i++) {
         int pixel_index = i * 3;
         
-        data[pixel_index + 1] = 0;  // vert = 0
-        data[pixel_index + 2] = 0;  // Bleu = 0
+        donnee[pixel_index + 1] = 0;  // vert = 0
+        donnee[pixel_index + 2] = 0;  // Bleu = 0
     }
     
-    // Enregistrement de l'image
-    write_image_data("image_out.bmp", data, width, height);
+    
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
-void color_green(char *filename)
+void color_green(char *source_path)
 {
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
+    
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int pixel = i * 3;
+        
+        donnee[pixel] = 0;  // Rouge = 0
+        donnee[pixel + 2] = 0;  // Bleu = 0
+    }
+    
+    
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
+
+
 void color_blue(char *filename)
 {
 }
@@ -368,9 +422,32 @@ void color_gray(char *source_path) {
 void invert(char *filename)
 {
 }
-void color_gray_luminance(char *filename)
+void color_gray_luminance(char *source_path)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+    
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+    
+    // Parcourir tous les pixels et calculer la luminosité
+    for (int i = 0; i < width * height; i++) {
+        int pixel_index = i * 3;
+        
+        unsigned char r = data[pixel_index];
+        unsigned char g = data[pixel_index + 1];
+        unsigned char b = data[pixel_index + 2];
+        
+        // Calculer la luminosité avec les coefficients donnés
+        unsigned char luminance = 0.21 * r + 0.72 * g + 0.07 * b;
+        
+        // Appliquer la même valeur de luminance à R, G et B
+        data[pixel_index] = luminance;     // R = luminance
+        data[pixel_index + 1] = luminance; // G = luminance
+        data[pixel_index + 2] = luminance; // B = luminance
+    }
+     write_image_data("image_out.bmp", data, width, height);
 }
+
 void rotate_cw(char *filename)
 {
 }
