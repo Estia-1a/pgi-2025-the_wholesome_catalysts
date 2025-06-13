@@ -85,22 +85,115 @@ void second_line(char *source_path)
     printf("second_line : %d, %d, %d", R, G, B);
 }
 
-/* #21 */
 
-void print_pixel(char *filename, int x, int y)
-{
+void print_pixel(char *source_path, int x, int y) {
+    unsigned char *data;
+    int width, height, channel_count;
+    pixelRGB *pixel = NULL;  
+
+    if (read_image_data(source_path, &data, &width, &height, &channel_count)){
+        pixel = get_pixel(data, width, height, channel_count, x, y);
+    }
+
+    if (pixel != NULL){
+        printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
+    }
+    return;
+    free(data);
 }
+
+
 
 /* #20 */
-void max_pixel(char *filename)
+
+
+void max_pixel(char *source_path)
 {
+    int largeur, hauteur, canaux;
+    unsigned char *donnees;
+
+    if (read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux) <= 0)
+    {
+        printf("Erreur : impossible de charger l'image %s\n", source_path);
+        return;
+    }
+
+    int somme_max = -1;
+    int coord_x_max = 0, coord_y_max = 0;
+    unsigned char r_max = 0, g_max = 0, b_max = 0;
+
+    for (int ligne = 0; ligne < hauteur; ligne++)
+    {
+        for (int col = 0; col < largeur; col++)
+        {
+            int index = (ligne * largeur + col) * canaux;
+
+            unsigned char r = donnees[index];
+            unsigned char g = donnees[index + 1];
+            unsigned char b = donnees[index + 2];
+
+            int total_rgb = r + g + b;
+
+            if (total_rgb > somme_max)
+            {
+                somme_max = total_rgb;
+                coord_x_max = col;
+                coord_y_max = ligne;
+                r_max = r;
+                g_max = g;
+                b_max = b;
+            }
+        }
+    }
+
+    printf("max_pixel (%d, %d): %d, %d, %d\n", coord_x_max, coord_y_max, r_max, g_max, b_max);
 }
+
 
 /* 19 */
 
-void min_pixel(char *filename)
+void min_pixel(char *source_path)
 {
+    int largeur, hauteur, canaux;
+    unsigned char *donnees;
+
+    if (read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux) <= 0)
+    {
+        printf("Erreur : impossible de charger l'image %s\n", source_path);
+        return;
+    }
+
+    int somme_min = 256 * 3 + 1; // valeur plus haute que toute somme RGB possible
+    int coord_x_min = 0, coord_y_min = 0;
+    unsigned char r_min = 0, g_min = 0, b_min = 0;
+
+    for (int ligne = 0; ligne < hauteur; ligne++)
+    {
+        for (int col = 0; col < largeur; col++)
+        {
+            int index = (ligne * largeur + col) * canaux;
+
+            unsigned char r = donnees[index];
+            unsigned char g = donnees[index + 1];
+            unsigned char b = donnees[index + 2];
+
+            int somme_rgb = r + g + b;
+
+            if (somme_rgb < somme_min)
+            {
+                somme_min = somme_rgb;
+                coord_x_min = col;
+                coord_y_min = ligne;
+                r_min = r;
+                g_min = g;
+                b_min = b;
+            }
+        }
+    }
+
+    printf("min_pixel (%d, %d): %d, %d, %d\n", coord_x_min, coord_y_min, r_min, g_min, b_min);
 }
+
 
 /* 18 */
 void max_component(char *source_path, char *component)
@@ -152,6 +245,82 @@ void min_component(char *filename)
 
 void stat_report(char *filename)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+    
+    // Lire les données de l'image
+    int result = read_image_data(filename, &data, &width, &height, &channel_count);
+    
+    if (result <= 0) {
+        printf("Erreur lors de la lecture de l'image\n");
+        return;
+    }
+    
+    // Initialiser les variables de statistiques
+    unsigned char max_pixel = 0;
+    unsigned char min_pixel = 255;
+    unsigned char max_r = 0, max_g = 0, max_b = 0;
+    unsigned char min_r = 255, min_g = 255, min_b = 255;
+    
+    // Parcourir tous les pixels
+    for (int i = 0; i < width * height; i++) {
+        int pixel_index = i * 3;  // Chaque pixel = 3 bytes (RGB)
+        
+        unsigned char r = data[pixel_index];
+        unsigned char g = data[pixel_index + 1];
+        unsigned char b = data[pixel_index + 2];
+        
+        // Calculer l'intensité du pixel (luminance)
+        unsigned char intensity = (unsigned char)(0.299 * r + 0.587 * g + 0.114 * b);
+        
+        // Mettre à jour les statistiques globales
+        if (intensity > max_pixel) max_pixel = intensity;
+        if (intensity < min_pixel) min_pixel = intensity;
+        
+        // Mettre à jour les statistiques par composante
+        if (r > max_r) max_r = r;
+        if (r < min_r) min_r = r;
+        
+        if (g > max_g) max_g = g;
+        if (g < min_g) min_g = g;
+        
+        if (b > max_b) max_b = b;
+        if (b < min_b) min_b = b;
+    }
+    
+    // Créer le nom du fichier de sortie
+    char output_filename[256];
+    snprintf(output_filename, sizeof(output_filename), "%s_stats.txt", filename);
+    
+    // Écrire les statistiques dans le fichier
+    FILE *output_file = fopen(output_filename, "w");
+    if (output_file == NULL) {
+        printf("Erreur lors de la création du fichier de sortie\n");
+        return;
+    }
+    
+    fprintf(output_file, "Rapport de statistiques de l'image\n");
+    fprintf(output_file, "==================================\n");
+    fprintf(output_file, "Image: %s\n", filename);
+    fprintf(output_file, "Dimensions: %d x %d pixels\n", width, height);
+    fprintf(output_file, "Total pixels: %d\n\n", width * height);
+    
+    fprintf(output_file, "Statistiques des pixels:\n");
+    fprintf(output_file, "max_pixel: %d\n", max_pixel);
+    fprintf(output_file, "min_pixel: %d\n\n", min_pixel);
+    
+    fprintf(output_file, "Statistiques des composantes RGB:\n");
+    fprintf(output_file, "max_component_R: %d\n", max_r);
+    fprintf(output_file, "max_component_G: %d\n", max_g);
+    fprintf(output_file, "max_component_B: %d\n", max_b);
+    fprintf(output_file, "min_component_R: %d\n", min_r);
+    fprintf(output_file, "min_component_G: %d\n", min_g);
+    fprintf(output_file, "min_component_B: %d\n", min_b);
+    
+    fclose(output_file);
+    
+    printf("Rapport de statistiques écrit dans: %s\n", output_filename);
+
 }
 void color_red(char *filename)
 {
