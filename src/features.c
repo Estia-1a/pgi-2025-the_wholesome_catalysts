@@ -85,7 +85,21 @@ void second_line(char *source_path)
 }
 
 
+void print_pixel(char *source_path, int x, int y) {
+    unsigned char *data;
+    int width, height, channel_count;
+    pixelRGB *pixel = NULL;  
 
+    if (read_image_data(source_path, &data, &width, &height, &channel_count)){
+        pixel = get_pixel(data, width, height, channel_count, x, y);
+    }
+
+    if (pixel != NULL){
+        printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
+    }
+    return;
+    free(data);
+}
 
 
 
