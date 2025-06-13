@@ -52,10 +52,15 @@ int main(int argc, char **argv) {
     second_line( configuration.filenames[0] );
   }
 
-  if ( strncmp( configuration.command, "print_pixel", 11 ) == 0 ) {
-    /* print_pixel() function is defined in feature.h and implemented in feature.c */
-    print_pixel( configuration.filenames[0] , atoi(configuration.arguments[0]), atoi(configuration.arguments[0])); /*il faut changer les ,0,0*/
-  }
+  if (strncmp(configuration.command, "print_pixel", 11) == 0) {
+      if (configuration.arguments[0] == NULL || configuration.arguments[1] == NULL) {
+          printf("Usage: freud.exe -f <image> -c print_pixel <x> <y>\n");
+          return 1; // Quitte si les arguments ne sont pas fournis
+      }
+      int x = atoi(configuration.arguments[0]);
+      int y = atoi(configuration.arguments[1]);
+      print_pixel(configuration.filenames[0], x, y);
+  } 
 
   if ( strncmp( configuration.command, "max_pixel", 9 ) == 0 ) {
     /* max_pixel() function is defined in feature.h and implemented in feature.c */
