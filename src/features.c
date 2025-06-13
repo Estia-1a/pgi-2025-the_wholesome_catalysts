@@ -74,9 +74,9 @@ void second_line(char *source_path)
 
     read_image_data(source_path, &data, &width, &height, &channel_count);
 
-    int ligne = 1;                                    /* seconde ligne (index 1) */
-    int colonne = 0;                                  /* premier pixel de la ligne */
-    int indice_pixel = (ligne * width + colonne) * 3; /* Calcul correct de l'indice */
+    int ligne = 1;                                    
+    int colonne = 0;                                  
+    int indice_pixel = (ligne * width + colonne) * 3; 
 
     unsigned char R = data[indice_pixel];
     unsigned char G = data[indice_pixel + 1];
@@ -87,18 +87,18 @@ void second_line(char *source_path)
 
 
 void print_pixel(char *source_path, int x, int y) {
-    unsigned char *data;
-    int width, height, channel_count;
-    pixelRGB *pixel = NULL;  
+    unsigned char *data = NULL;
+    int width, height, nb_cannaux;
+    pixelRGB *pixel = NULL;
 
-    if (read_image_data(source_path, &data, &width, &height, &channel_count)){
-        pixel = get_pixel(data, width, height, channel_count, x, y);
-    }
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);
+    
+    pixel = get_pixel(data, width, height, nb_cannaux, x, y);
 
-    if (pixel != NULL){
+    if (pixel != NULL) {
         printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
     }
-    return;
+
     free(data);
 }
 
@@ -163,7 +163,7 @@ void min_pixel(char *source_path)
         return;
     }
 
-    int somme_min = 256 * 3 + 1; // valeur plus haute que toute somme RGB possible
+    int somme_min = 256 * 3 + 1; 
     int coord_x_min = 0, coord_y_min = 0;
     unsigned char r_min = 0, g_min = 0, b_min = 0;
 
@@ -408,20 +408,32 @@ void color_blue(char *source_path)
     read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
     
     for (int i = 0; i < largeur * hauteur; i++) {
-        int pixel = i * 3;
+        int compteur = i * 3;
         
-        donnee[pixel] = 0;  // Rouge = 0
-        donnee[pixel + 1] = 0;  // Vert = 0
+        donnee[compteur] = 0;  // Rouge = 0
+        donnee[compteur + 1] = 0;  // Vert = 0
     }
     
     
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
-
-/*#12*/
-
-void color_gray(char *filename)
-{
+void color_gray(char *source_path) {    
+    int width, height, nb_cannaux;    
+    unsigned char *data;    
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);    // Parcourir tous les pixels et calculer la moyenne RGB    
+    for (int i = 0; i < width * height; i++) {        
+        int pixel_index = i * 3;        
+        unsigned char r = data[pixel_index];        
+        unsigned char g = data[pixel_index + 1];        
+        unsigned char b = data[pixel_index + 2];        // Calculer la moyenne des composantes RGB        
+        unsigned char gray = (r + g + b) / 3;        // Appliquer la même valeur grise à R, G et B        
+        data[pixel_index] = gray;     // R = gray        
+        data[pixel_index + 1] = gray; // G = gray        
+        data[pixel_index + 2] = gray; // B = gray  
+    }
+      
+    // Sauvegarder l'image modifiée   
+    write_image_data("image_out.bmp", data, width, height);
 }
 
 /*#11*/
@@ -434,28 +446,27 @@ void invert(char *filename)
 
 void color_gray_luminance(char *source_path)
 {
-    int width, height, channel_count;
-    unsigned char *data;
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
     
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
-    // Parcourir tous les pixels et calculer la luminosité
-    for (int i = 0; i < width * height; i++) {
-        int pixel_index = i * 3;
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int compteur = i * 3;
         
-        unsigned char r = data[pixel_index];
-        unsigned char g = data[pixel_index + 1];
-        unsigned char b = data[pixel_index + 2];
+        unsigned char r = donnee[compteur];
+        unsigned char g = donnee[compteur + 1];
+        unsigned char b = donnee[compteur + 2];
         
-        // Calculer la luminosité avec les coefficients donnés
+        
         unsigned char luminance = 0.21 * r + 0.72 * g + 0.07 * b;
         
-        // Appliquer la même valeur de luminance à R, G et B
-        data[pixel_index] = luminance;     // R = luminance
-        data[pixel_index + 1] = luminance; // G = luminance
-        data[pixel_index + 2] = luminance; // B = luminance
+        donnee[compteur] = luminance;    
+        donnee[compteur + 1] = luminance; 
+        donnee[compteur + 2] = luminance; 
     }
-     write_image_data("image_out.bmp", data, width, height);
+     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
 void rotate_cw(char *filename)
