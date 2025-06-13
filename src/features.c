@@ -239,6 +239,8 @@ print_result:
     free(data);
 }
 
+/*#17*/
+
 void min_component(char *source_path, char *component)
 {
     int width, height, channel_count;
@@ -282,18 +284,16 @@ print_result:
     free(data);
 }
 
-void stat_report(char *filename)
+
+
+/*#16*/
+
+void stat_report(char *source_path)
 {
     int width, height, channel_count;
     unsigned char *data;
     
-    // Lire les données de l'image
-    int result = read_image_data(filename, &data, &width, &height, &channel_count);
-    
-    if (result <= 0) {
-        printf("Erreur lors de la lecture de l'image\n");
-        return;
-    }
+    read_image_data(source_path, &data, &width, &height, &channel_count);
     
     // Initialiser les variables de statistiques
     unsigned char max_pixel = 0;
@@ -303,18 +303,18 @@ void stat_report(char *filename)
     
     // Parcourir tous les pixels
     for (int i = 0; i < width * height; i++) {
-        int pixel_index = i * 3;  // Chaque pixel = 3 bytes (RGB)
+        int pixel_index = i * 3; 
         
         unsigned char r = data[pixel_index];
         unsigned char g = data[pixel_index + 1];
         unsigned char b = data[pixel_index + 2];
         
-        // Calculer l'intensité du pixel (luminance)
-        unsigned char intensity = (unsigned char)(0.299 * r + 0.587 * g + 0.114 * b);
+        // Calcul de la luminance
+        unsigned char luminance = (unsigned char)(0.299 * r + 0.587 * g + 0.114 * b);
         
         // Mettre à jour les statistiques globales
-        if (intensity > max_pixel) max_pixel = intensity;
-        if (intensity < min_pixel) min_pixel = intensity;
+        if (luminance > max_pixel) max_pixel = luminance;
+        if (luminance < min_pixel) min_pixel = luminance;
         
         // Mettre à jour les statistiques par composante
         if (r > max_r) max_r = r;
@@ -327,20 +327,16 @@ void stat_report(char *filename)
         if (b < min_b) min_b = b;
     }
     
-    // Créer le nom du fichier de sortie
+    // Création du fichier
     char output_filename[256];
-    snprintf(output_filename, sizeof(output_filename), "%s_stats.txt", filename);
+    snprintf(output_filename, sizeof(output_filename), "%s_stats.txt", source_path);
     
     // Écrire les statistiques dans le fichier
     FILE *output_file = fopen(output_filename, "w");
-    if (output_file == NULL) {
-        printf("Erreur lors de la création du fichier de sortie\n");
-        return;
-    }
     
     fprintf(output_file, "Rapport de statistiques de l'image\n");
     fprintf(output_file, "==================================\n");
-    fprintf(output_file, "Image: %s\n", filename);
+    fprintf(output_file, "Image: %s\n", source_path);
     fprintf(output_file, "Dimensions: %d x %d pixels\n", width, height);
     fprintf(output_file, "Total pixels: %d\n\n", width * height);
     
@@ -358,9 +354,12 @@ void stat_report(char *filename)
     
     fclose(output_file);
     
-    printf("Rapport de statistiques écrit dans: %s\n", output_filename) ;
+    printf("Le rapport des statistiques est dans: %s\n", output_filename) ;
 
 }
+
+/*#15*/
+
 void color_red(char *source_path)
 {
     int largeur, hauteur, nb_canaux;
@@ -378,6 +377,8 @@ void color_red(char *source_path)
     
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
+
+/*#14*/
 
 void color_green(char *source_path)
 {
@@ -397,6 +398,7 @@ void color_green(char *source_path)
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
+/*#13*/
 
 void color_blue(char *source_path)
 {
@@ -433,9 +435,15 @@ void color_gray(char *source_path) {
  
     write_image_data("image_out.bmp", data, width, height);
 }
+
+/*#11*/
+
 void invert(char *filename)
 {
 }
+
+/*#10*/
+
 void color_gray_luminance(char *source_path)
 {
     int largeur, hauteur, nb_canaux;
