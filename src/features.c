@@ -369,10 +369,10 @@ void color_red(char *source_path)
     read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
     for (int i = 0; i < largeur * hauteur; i++) {
-        int pixel_index = i * 3;
+        int compteur = i * 3;
         
-        donnee[pixel_index + 1] = 0;  // vert = 0
-        donnee[pixel_index + 2] = 0;  // Bleu = 0
+        donnee[compteur + 1] = 0;  // vert = 0
+        donnee[compteur + 2] = 0;  // Bleu = 0
     }
     
     
@@ -387,10 +387,10 @@ void color_green(char *source_path)
     read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux)  ;
     
     for (int i = 0; i < largeur * hauteur; i++) {
-        int pixel = i * 3;
+        int compteur = i * 3;
         
-        donnee[pixel] = 0;  // Rouge = 0
-        donnee[pixel + 2] = 0;  // Bleu = 0
+        donnee[compteur] = 0;  // Rouge = 0
+        donnee[compteur + 2] = 0;  // Bleu = 0
     }
     
     
