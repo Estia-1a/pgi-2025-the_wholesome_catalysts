@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "features.h"
 #include "utils.h"
+#include <stdlib.h>
 
 /**
  * @brief Here, you have to code features of the project.
@@ -104,58 +105,138 @@ void print_pixel(char *source_path, int x, int y) {
 
 
 /* #20 */
+
+
 void max_pixel(char *source_path)
 {
-    int width, height, channels;
-    unsigned char *data;
+    int largeur, hauteur, canaux;
+    unsigned char *donnees;
 
-    if (read_image_data(source_path, &data, &width, &height, &channels) <= 0)
+    if (read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux) <= 0)
     {
-        printf("Erreur lors de la lecture de l'image.\n");
+        printf("Erreur : impossible de charger l'image %s\n", source_path);
         return;
     }
 
-    int max_total = -1;
-    int best_x = 0, best_y = 0;
-    unsigned char best_r = 0, best_g = 0, best_b = 0;
+    int somme_max = -1;
+    int coord_x_max = 0, coord_y_max = 0;
+    unsigned char r_max = 0, g_max = 0, b_max = 0;
 
-    for (int y = 0; y < height; y++)
+    for (int ligne = 0; ligne < hauteur; ligne++)
     {
-        for (int x = 0; x < width; x++)
+        for (int col = 0; col < largeur; col++)
         {
-            int pixel_index = (y * width + x) * channels;
+            int index = (ligne * largeur + col) * canaux;
 
-            unsigned char r = data[pixel_index];
-            unsigned char g = data[pixel_index + 1];
-            unsigned char b = data[pixel_index + 2];
+            unsigned char r = donnees[index];
+            unsigned char g = donnees[index + 1];
+            unsigned char b = donnees[index + 2];
 
-            int rgb_sum = r + g + b;
+            int total_rgb = r + g + b;
 
-            if (rgb_sum > max_total)
+            if (total_rgb > somme_max)
             {
-                max_total = rgb_sum;
-                best_x = x;
-                best_y = y;
-                best_r = r;
-                best_g = g;
-                best_b = b;
+                somme_max = total_rgb;
+                coord_x_max = col;
+                coord_y_max = ligne;
+                r_max = r;
+                g_max = g;
+                b_max = b;
             }
         }
     }
 
-    printf("max_pixel (%d, %d): %d, %d, %d\n", best_x, best_y, best_r, best_g, best_b);
+    printf("max_pixel (%d, %d): %d, %d, %d\n", coord_x_max, coord_y_max, r_max, g_max, b_max);
 }
+
 
 /* 19 */
 
-void min_pixel(char *filename)
+void min_pixel(char *source_path)
 {
+    int largeur, hauteur, canaux;
+    unsigned char *donnees;
+
+    if (read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux) <= 0)
+    {
+        printf("Erreur : impossible de charger l'image %s\n", source_path);
+        return;
+    }
+
+    int somme_min = 256 * 3 + 1; // valeur plus haute que toute somme RGB possible
+    int coord_x_min = 0, coord_y_min = 0;
+    unsigned char r_min = 0, g_min = 0, b_min = 0;
+
+    for (int ligne = 0; ligne < hauteur; ligne++)
+    {
+        for (int col = 0; col < largeur; col++)
+        {
+            int index = (ligne * largeur + col) * canaux;
+
+            unsigned char r = donnees[index];
+            unsigned char g = donnees[index + 1];
+            unsigned char b = donnees[index + 2];
+
+            int somme_rgb = r + g + b;
+
+            if (somme_rgb < somme_min)
+            {
+                somme_min = somme_rgb;
+                coord_x_min = col;
+                coord_y_min = ligne;
+                r_min = r;
+                g_min = g;
+                b_min = b;
+            }
+        }
+    }
+
+    printf("min_pixel (%d, %d): %d, %d, %d\n", coord_x_min, coord_y_min, r_min, g_min, b_min)  ;
 }
 
-/* 18 */
 
-void max_component(char *filename)
+/* 18 */
+void max_component(char *source_path, char *component)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+
+    if (channel_count < 3) {
+        printf("Image must have at least 3 channels (R, G, B)\n");
+        return;
+    }
+
+    int max_value = -1;
+    int max_x = 0;
+    int max_y = 0;
+
+    int index = 0;
+    char c = component[0];
+    int component_offset = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            index = (y * width + x) * channel_count;
+            int value = data[index + component_offset];
+
+            if (value > max_value) {
+                max_value = value;
+                max_x = x;
+                max_y = y;
+
+                if (max_value == 255) { // valeur max possible
+                    goto print_result;
+                }
+            }
+        }
+    }
+
+print_result:
+    printf("max_component %c (%d, %d): %d\n", c, max_x, max_y, max_value);
+
+    free(data);
 }
 
 void min_component(char *filename)
