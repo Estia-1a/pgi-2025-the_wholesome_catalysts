@@ -10,7 +10,7 @@ void second_line(char *source_path); /*22*/
 void print_pixel( char *filename, int x, int y ); /*21*/
 void max_pixel (char *filename); /*20*/
 void min_pixel (char *filename); /*19*/
-void max_component (char *filename); /*18*/
+void max_component (char *source_path, char *component); /*18*/
 void min_component (char *filename); /*17*/
 void stat_report(char * filename);
 void color_red(char * filename);
