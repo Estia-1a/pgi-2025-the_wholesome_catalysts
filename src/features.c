@@ -469,9 +469,13 @@ void color_gray_luminance(char *source_path)
      write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
-void rotate_cw(char *filename)
+void rotate_cw(char *source_path)
 {
 }
+
+
+/*#9*/
+
 void rotate_acw(char *filename)
 {
 }
