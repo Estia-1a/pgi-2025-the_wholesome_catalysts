@@ -88,12 +88,12 @@ void second_line(char *source_path)
 
 void print_pixel(char *source_path, int x, int y) {
     unsigned char *data = NULL;
-    int width, height, nb_cannaux;
+    int width, height, nb_canaux;
     pixelRGB *pixel = NULL;
 
-    read_image_data(source_path, &data, &width, &height, &nb_cannaux);
+    read_image_data(source_path, &data, &width, &height, &nb_canaux);
     
-    pixel = get_pixel(data, width, height, nb_cannaux, x, y);
+    pixel = get_pixel(data, width, height, nb_canaux, x, y);
 
     if (pixel != NULL) {
         printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
@@ -508,6 +508,8 @@ void rotate_cw(char *source_path)
             int dst_x = height - 1 - y;
             int dst_y = x;
             int dst_index = (dst_y * new_width + dst_x) * channel_count;
+
+
 
             for (int c = 0; c < channel_count; c++) {
                 rotated_data[dst_index + c] = data[src_index + c];
