@@ -25,7 +25,7 @@ void dimension(char *source_path)
     int hauteur = 0;
     int compteur = 0;
 
-    int result = read_image_data(source_path, &data, largeur, &hauteur, &compteur);
+    int result = read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
 
     if (result > 0)
     {
@@ -532,9 +532,33 @@ void rotate_cw(char *source_path)
 void rotate_acw(char *filename)
 {
 }
+
 void mirror_horizontal(char *source_path)
 {
+    int width, height, nb_canaux;
+    unsigned char *data;
+ 
+    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+ 
+    
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width / 2; x++) {
+            int left_index = (y * width + x) * nb_canaux;
+            int right_index = (y * width + (width - 1 - x)) * nb_canaux;
+ 
+            
+            for (int c = 0; c < nb_canaux; c++) {
+                unsigned char temp = data[left_index + c];
+                data[left_index + c] = data[right_index + c];
+                data[right_index + c] = temp;
+            }
+        }
+    }
+ 
+    write_image_data("image_out.bmp", data, width, height);
+ 
 }
+
 void mirror_vertical(char *source_path)
 {
 }
