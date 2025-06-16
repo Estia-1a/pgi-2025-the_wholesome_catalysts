@@ -417,29 +417,44 @@ void color_blue(char *source_path)
     
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
+
+/*#12*/
+
 void color_gray(char *source_path) {    
     int width, height, nb_cannaux;    
     unsigned char *data;    
-    read_image_data(source_path, &data, &width, &height, &nb_cannaux);    // Parcourir tous les pixels et calculer la moyenne RGB    
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);      
     for (int i = 0; i < width * height; i++) {        
         int pixel_index = i * 3;        
         unsigned char r = data[pixel_index];        
         unsigned char g = data[pixel_index + 1];        
-        unsigned char b = data[pixel_index + 2];        // Calculer la moyenne des composantes RGB        
-        unsigned char gray = (r + g + b) / 3;        // Appliquer la même valeur grise à R, G et B        
+        unsigned char b = data[pixel_index + 2];          
+        unsigned char gray = (r + g + b) / 3;        
         data[pixel_index] = gray;     // R = gray        
         data[pixel_index + 1] = gray; // G = gray        
         data[pixel_index + 2] = gray; // B = gray  
     }
-      
-    // Sauvegarder l'image modifiée   
+ 
     write_image_data("image_out.bmp", data, width, height);
 }
 
 /*#11*/
 
-void invert(char *filename)
+void invert(char *source_path)
 {
+    int width, height, nb_cannaux;
+    unsigned char *data;
+    read_image_data(source_path, &data, &width, &height, &nb_cannaux);
+
+    for (int i = 0; i < width * height; i++) {
+        int pixel_index = i * 3;
+
+        data[pixel_index] = 255 - data[pixel_index];         // R inversé
+        data[pixel_index + 1] = 255 - data[pixel_index + 1]; // G inversé
+        data[pixel_index + 2] = 255 - data[pixel_index + 2]; // B inversé
+    }
+
+    write_image_data("image_out.bmp", data, width, height);
 }
 
 /*#10*/
@@ -471,32 +486,70 @@ void color_gray_luminance(char *source_path)
 
 void rotate_cw(char *source_path)
 {
+    int width, height, channel_count;
+    unsigned char *data;
+
+    read_image_data(source_path, &data, &width, &height, &channel_count);
+
+    if (channel_count < 3) {
+        printf("Image must have at least 3 channels\n");
+        free(data);
+        return;
+    }
+
+    int new_width = height;
+    int new_height = width;
+
+    unsigned char *rotated_data = malloc(new_width * new_height * channel_count);
+    if (!rotated_data) {
+        printf("Memory allocation failed\n");
+        free(data);
+        return;
+    }
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int src_index = (y * width + x) * channel_count;
+            int dst_x = height - 1 - y;
+            int dst_y = x;
+            int dst_index = (dst_y * new_width + dst_x) * channel_count;
+
+            for (int c = 0; c < channel_count; c++) {
+                rotated_data[dst_index + c] = data[src_index + c];
+            }
+        }
+    }
+
+
+    write_image_data("image_out.bmp", rotated_data, new_width, new_height);
+
+    free(data);
+    free(rotated_data);
+
+    printf("Image rotated 90° clockwise and saved as image_out.bmp\n");
 }
-
-
-/*#9*/
 
 void rotate_acw(char *filename)
 {
 }
-void mirror_horizontal(char *filename)
+void mirror_horizontal(char *source_path)
 {
 }
-void mirror_vertical(char *filename)
+void mirror_vertical(char *source_path)
 {
 }
-void mirror_total(char *filename)
+void mirror_total(char *source_path)
 {
 }
-void scale_crop(char *filename)
+void scale_crop(char *source_path)
 {
 }
-void scale_nearest(char *filename)
+void scale_nearest(char *source_path)
 {
 }
-void scale_bilinear(char *filename)
+void scale_bilinear(char *source_path)
 {
 }
-void color_desaturate(char *filename)
+void color_desaturate(char *source_path)
 {
 }
