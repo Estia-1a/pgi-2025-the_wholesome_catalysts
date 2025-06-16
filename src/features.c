@@ -491,11 +491,6 @@ void rotate_cw(char *source_path)
 
     read_image_data(source_path, &data, &width, &height, &channel_count);
 
-    if (channel_count < 3) {
-        printf("Image must have at least 3 channels\n");
-        free(data);
-        return;
-    }
 
     int new_width = height;
     int new_height = width;
@@ -522,22 +517,48 @@ void rotate_cw(char *source_path)
 
 
     write_image_data("image_out.bmp", rotated_data, new_width, new_height);
-
-    free(data);
-    free(rotated_data);
-
-    printf("Image rotated 90° clockwise and saved as image_out.bmp\n");
 }
 
-void rotate_acw(char *filename)
+/*#9*/
+
+void rotate_acw(char *source_path)
 {
 }
+
+
 void mirror_horizontal(char *source_path)
 {
 }
+
+
 void mirror_vertical(char *source_path)
 {
+    int width, height, nb_canaux;
+    unsigned char *data;
+    
+    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+    
+    // Effectuer la symétrie complète directement sur les données
+    for (int y = 0; y < height / 2; y++) {
+        for (int x = 0; x < width; x++) {
+            // Échanger le pixel avec son opposé vertical et horizontal
+            int top_index = (y * width + x) * 3;
+            int bottom_index = ((height - 1 - y) * width + (width - 1 - x)) * 3;
+            
+            // Échanger R, G, B
+            for (int c = 0; c < 3; c++) {
+                unsigned char temp = data[top_index + c];
+                data[top_index + c] = data[bottom_index + c];
+                data[bottom_index + c] = temp;
+            }
+        }
+    }
+
+    
+    write_image_data("image_out.bmp", data, width, height);
 }
+
+
 void mirror_total(char *source_path)
 {
 }
