@@ -21,26 +21,26 @@ void dimension(char *source_path)
 
     unsigned char *data;
 
-    int width = 0;
-    int height = 0;
-    int channel_count = 0;
+    int largeur = 0;
+    int hauteur = 0;
+    int compteur = 0;
 
-    int result = read_image_data(source_path, &data, &width, &height, &channel_count);
+    int result = read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
 
     if (result > 0)
     {
 
-        printf("dimension: %d, %d\n", width, height);
+        printf("dimension: %d, %d\n", largeur, hauteur);
     }
     return;
 }
 
 void first_pixel(char *source_path)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, compteur;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
 
     unsigned char R = data[0];
     unsigned char G = data[1];
@@ -50,17 +50,17 @@ void first_pixel(char *source_path)
 
 void tenth_pixel(char *source_path)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, compteur;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
 
-    int ligne_pixel = 9;                /*pixel de la 10eme ligne */
-    int indice_pixel = ligne_pixel * 3; /*Chaque pixel est composé de 3 bytes*/
+    int pixel = 9;                
+    int res = pixel * 3; 
 
-    unsigned char R = data[indice_pixel];
-    unsigned char G = data[indice_pixel + 1];
-    unsigned char B = data[indice_pixel + 2];
+    unsigned char R = data[res];
+    unsigned char G = data[res + 1];
+    unsigned char B = data[res + 2];
 
     printf("tenth_pixel: %d, %d, %d", R, G, B);
 }
@@ -69,18 +69,18 @@ void tenth_pixel(char *source_path)
 
 void second_line(char *source_path)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, compteur;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
 
     int ligne = 1;                                    
     int colonne = 0;                                  
-    int indice_pixel = (ligne * width + colonne) * 3; 
+    int res = (ligne * largeur + colonne) * 3; 
 
-    unsigned char R = data[indice_pixel];
-    unsigned char G = data[indice_pixel + 1];
-    unsigned char B = data[indice_pixel + 2];
+    unsigned char R = data[res];
+    unsigned char G = data[res + 1];
+    unsigned char B = data[res + 2];
 
     printf("second_line : %d, %d, %d", R, G, B);
 }
@@ -198,12 +198,12 @@ void min_pixel(char *source_path)
 /* 18 */
 void max_component(char *source_path, char *component)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, compteur;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
 
-    if (channel_count < 3) {
+    if (compteur < 3) {
         printf("Image must have at least 3 channels (R, G, B)\n");
         return;
     }
@@ -214,12 +214,12 @@ void max_component(char *source_path, char *component)
 
     int index = 0;
     char c = component[0];
-    int component_offset = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
+    int componentt = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            index = (y * width + x) * channel_count;
-            int value = data[index + component_offset];
+    for (int y = 0; y < hauteur; y++) {
+        for (int x = 0; x < largeur; x++) {
+            index = (y * largeur + x) * compteur;
+            int value = data[index + componentt];
 
             if (value > max_value) {
                 max_value = value;
@@ -243,13 +243,13 @@ print_result:
 
 void min_component(char *source_path, char *component)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, compteur;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
 
-    if (channel_count < 3) {
-        printf("Image must have at least 3 channels (R, G, B)\n");
+    if (compteur < 3) {
+        printf("l'image doit comporter au moins 3 canaux (R, G, B)\n");
         return;
     }
 
@@ -259,12 +259,12 @@ void min_component(char *source_path, char *component)
 
     int index = 0;
     char c = component[0];
-    int component_offset = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
+    int componentt = (c == 'R') ? 0 : (c == 'G') ? 1 : 2;
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            index = (y * width + x) * channel_count;
-            int value = data[index + component_offset];
+    for (int y = 0; y < hauteur; y++) {
+        for (int x = 0; x < largeur; x++) {
+            index = (y * largeur + x) * compteur;
+            int value = data[index + componentt];
 
             if (value < min_value) {
                 min_value = value;
@@ -290,33 +290,33 @@ print_result:
 
 void stat_report(char *source_path)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, compteur;
     unsigned char *data;
     
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &compteur);
     
-    // Initialiser les variables de statistiques
+    
     unsigned char max_pixel = 0;
     unsigned char min_pixel = 255;
     unsigned char max_r = 0, max_g = 0, max_b = 0;
     unsigned char min_r = 255, min_g = 255, min_b = 255;
     
-    // Parcourir tous les pixels
-    for (int i = 0; i < width * height; i++) {
-        int pixel_index = i * 3; 
+    
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int pixel = i * 3; 
         
-        unsigned char r = data[pixel_index];
-        unsigned char g = data[pixel_index + 1];
-        unsigned char b = data[pixel_index + 2];
+        unsigned char r = data[pixel];
+        unsigned char g = data[pixel + 1];
+        unsigned char b = data[pixel + 2];
         
-        // Calcul de la luminance
+        
         unsigned char luminance = (unsigned char)(0.299 * r + 0.587 * g + 0.114 * b);
         
-        // Mettre à jour les statistiques globales
+        
         if (luminance > max_pixel) max_pixel = luminance;
         if (luminance < min_pixel) min_pixel = luminance;
         
-        // Mettre à jour les statistiques par composante
+        
         if (r > max_r) max_r = r;
         if (r < min_r) min_r = r;
         
@@ -327,18 +327,18 @@ void stat_report(char *source_path)
         if (b < min_b) min_b = b;
     }
     
-    // Création du fichier
+    
     char output_filename[256];
     snprintf(output_filename, sizeof(output_filename), "%s_stats.txt", source_path);
     
-    // Écrire les statistiques dans le fichier
+    
     FILE *output_file = fopen(output_filename, "w");
     
     fprintf(output_file, "Rapport de statistiques de l'image\n");
     fprintf(output_file, "==================================\n");
     fprintf(output_file, "Image: %s\n", source_path);
-    fprintf(output_file, "Dimensions: %d x %d pixels\n", width, height);
-    fprintf(output_file, "Total pixels: %d\n\n", width * height);
+    fprintf(output_file, "Dimensions: %d x %d pixels\n", largeur, hauteur);
+    fprintf(output_file, "Total pixels: %d\n\n", largeur * hauteur);
     
     fprintf(output_file, "Statistiques des pixels:\n");
     fprintf(output_file, "max_pixel: %d\n", max_pixel);
@@ -370,8 +370,8 @@ void color_red(char *source_path)
     for (int i = 0; i < largeur * hauteur; i++) {
         int compteur = i * 3;
         
-        donnee[compteur + 1] = 0;  // vert = 0
-        donnee[compteur + 2] = 0;  // Bleu = 0
+        donnee[compteur + 1] = 0;  
+        donnee[compteur + 2] = 0;  
     }
     
     
@@ -390,8 +390,8 @@ void color_green(char *source_path)
     for (int i = 0; i < largeur * hauteur; i++) {
         int compteur = i * 3;
         
-        donnee[compteur] = 0;  // Rouge = 0
-        donnee[compteur + 2] = 0;  // Bleu = 0
+        donnee[compteur] = 0;  
+        donnee[compteur + 2] = 0;  
     }
     
     
@@ -410,8 +410,8 @@ void color_blue(char *source_path)
     for (int i = 0; i < largeur * hauteur; i++) {
         int compteur = i * 3;
         
-        donnee[compteur] = 0;  // Rouge = 0
-        donnee[compteur + 1] = 0;  // Vert = 0
+        donnee[compteur] = 0;  
+        donnee[compteur + 1] = 0;  
     }
     
     
@@ -421,40 +421,40 @@ void color_blue(char *source_path)
 /*#12*/
 
 void color_gray(char *source_path) {    
-    int width, height, nb_cannaux;    
-    unsigned char *data;    
-    read_image_data(source_path, &data, &width, &height, &nb_cannaux);      
-    for (int i = 0; i < width * height; i++) {        
-        int pixel_index = i * 3;        
-        unsigned char r = data[pixel_index];        
-        unsigned char g = data[pixel_index + 1];        
-        unsigned char b = data[pixel_index + 2];          
+    int largeur, hauteur, nb_canaux;    
+    unsigned char *donnee;    
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);      
+    for (int i = 0; i < largeur * hauteur; i++) {        
+        int res = i * 3;        
+        unsigned char r = donnee[res];        
+        unsigned char g = donnee[res + 1];        
+        unsigned char b = donnee[res + 2];          
         unsigned char gray = (r + g + b) / 3;        
-        data[pixel_index] = gray;     // R = gray        
-        data[pixel_index + 1] = gray; // G = gray        
-        data[pixel_index + 2] = gray; // B = gray  
+        donnee[res] = gray;            
+        donnee[res + 1] = gray;        
+        donnee[res + 2] = gray;  
     }
  
-    write_image_data("image_out.bmp", data, width, height);
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
 /*#11*/
 
 void invert(char *source_path)
 {
-    int width, height, nb_cannaux;
-    unsigned char *data;
-    read_image_data(source_path, &data, &width, &height, &nb_cannaux);
+    int largeur, hauteur, nb_canaux;
+    unsigned char *donnee;
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
 
-    for (int i = 0; i < width * height; i++) {
-        int pixel_index = i * 3;
+    for (int i = 0; i < largeur * hauteur; i++) {
+        int res = i * 3;
 
-        data[pixel_index] = 255 - data[pixel_index];         // R inversé
-        data[pixel_index + 1] = 255 - data[pixel_index + 1]; // G inversé
-        data[pixel_index + 2] = 255 - data[pixel_index + 2]; // B inversé
+        donnee[res] = 255 - donnee[res];         // R inversé
+        donnee[res + 1] = 255 - donnee[res + 1]; // G inversé
+        donnee[res + 2] = 255 - donnee[res + 2]; // B inversé
     }
 
-    write_image_data("image_out.bmp", data, width, height);
+    write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
 /*#10*/
@@ -525,11 +525,31 @@ void rotate_acw(char *source_path)
 {
 }
 
-
 void mirror_horizontal(char *source_path)
 {
+    int width, height, nb_canaux;
+    unsigned char *data;
+ 
+    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+ 
+    
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width / 2; x++) {
+            int left_index = (y * width + x) * nb_canaux;
+            int right_index = (y * width + (width - 1 - x)) * nb_canaux;
+ 
+            
+            for (int c = 0; c < nb_canaux; c++) {
+                unsigned char temp = data[left_index + c];
+                data[left_index + c] = data[right_index + c];
+                data[right_index + c] = temp;
+            }
+        }
+    }
+ 
+    write_image_data("image_out.bmp", data, width, height);
+ 
 }
-
 
 void mirror_vertical(char *source_path)
 {
