@@ -581,6 +581,44 @@ void mirror_vertical(char *source_path)
 
 void mirror_total(char *source_path)
 {
+    int width, height, nb_canaux;
+    unsigned char *data;
+    
+    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+    
+    for (int y = 0; y < height / 2; y++) {
+        for (int x = 0; x < width; x++) {
+            
+            int top_index = (y * width + x) * 3;
+            int bottom_index = ((height - 1 - y) * width + (width - 1 - x)) * 3;
+            
+            
+            for (int c = 0; c < 3; c++) {
+                unsigned char temp = data[top_index + c];
+                data[top_index + c] = data[bottom_index + c];
+                data[bottom_index + c] = temp;
+            }
+        }
+    }
+    
+    
+    if (height % 2 == 1) {
+        int middle_y = height / 2;
+        for (int x = 0; x < width / 2; x++) {
+            int left_index = (middle_y * width + x) * 3;
+            int right_index = (middle_y * width + (width - 1 - x)) * 3;
+            
+            
+            for (int c = 0; c < 3; c++) {
+                unsigned char temp = data[left_index + c];
+                data[left_index + c] = data[right_index + c];
+                data[right_index + c] = temp;
+            }
+        }
+    }
+    
+    write_image_data("image_out.bmp", data, width, height);
+    
 }
 void scale_crop(char *source_path)
 {
