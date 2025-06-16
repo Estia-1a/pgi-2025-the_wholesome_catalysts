@@ -622,9 +622,13 @@ void mirror_total(char *source_path)
     write_image_data("image_out.bmp", data, width, height);
     
 }
+
+
 void scale_crop(char *source_path)
 {
 }
+
+ 
 void scale_nearest(char *source_path)
 {
 }
