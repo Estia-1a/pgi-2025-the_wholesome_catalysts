@@ -24,7 +24,7 @@ void rotate_acw(char * filename);
 void mirror_horizontal(char * filename);
 void mirror_vertical(char * filename);
 void mirror_total(char * filename);
-void scale_crop(char * filename);
+void scale_crop(char *source_path);
 void scale_nearest(char * filename);
 void scale_bilinear(char * filename);
 void color_desaturate(char * filename);
