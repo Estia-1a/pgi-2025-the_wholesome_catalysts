@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
 
   if ( strncmp( configuration.command, "scale_crop", 10 ) == 0 ) {
     /* scale_crop() function is defined in feature.h and implemented in feature.c */
-    scale_crop( configuration.filenames[0] );
+    scale_crop( configuration.filenames[0], configuration.arguments[0]);
   }
 
   if ( strncmp( configuration.command, "scale_nearest", 13 ) == 0 ) {
