@@ -140,9 +140,23 @@ int main(int argc, char **argv) {
     mirror_total( configuration.filenames[0] );
   }
 
-  if ( strncmp( configuration.command, "scale_crop", 10 ) == 0 ) {
-    /* scale_crop() function is defined in feature.h and implemented in feature.c */
-    scale_crop( configuration.filenames[0], configuration.arguments[0]);
+  if (strncmp(configuration.command, "scale_crop", 10) == 0) {
+    int arg_count = 0;
+    while (configuration.arguments[arg_count] != NULL) {
+        arg_count++;
+    }
+
+    if (arg_count < 4) {
+        fprintf(stderr, "Erreur : scale_crop requiert 4 arguments : center_x center_y largeur hauteur\n");
+        return 1;
+    }
+
+    int center_x = atoi(configuration.arguments[0]);
+    int center_y = atoi(configuration.arguments[1]);
+    int crop_largeur = atoi(configuration.arguments[2]);
+    int crop_hauteur = atoi(configuration.arguments[3]);
+
+    scale_crop_internal(configuration.filenames[0], center_x, center_y, crop_largeur, crop_hauteur);
   }
 
   if ( strncmp( configuration.command, "scale_nearest", 13 ) == 0 ) {
