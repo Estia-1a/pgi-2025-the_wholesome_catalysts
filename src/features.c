@@ -749,11 +749,11 @@ void color_desaturate(char *source_path)
    
         unsigned char luminance = (r + g + b) / 3;
         
-        float desaturation_factor = 0.5f; 
+        float facteur = 0.5f; 
         
-        donnee[index] = (unsigned char)(r * (1.0f - desaturation_factor) + luminance * desaturation_factor);
-        donnee[index + 1] = (unsigned char)(g * (1.0f - desaturation_factor) + luminance * desaturation_factor);
-        donnee[index + 2] = (unsigned char)(b * (1.0f - desaturation_factor) + luminance * desaturation_factor);
+        donnee[index] = (unsigned char)(r * (1.0f - facteur) + luminance * facteur);
+        donnee[index + 1] = (unsigned char)(g * (1.0f - facteur) + luminance * facteur);
+        donnee[index + 2] = (unsigned char)(b * (1.0f - facteur) + luminance * facteur);
     }
     
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
