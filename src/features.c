@@ -484,8 +484,6 @@ void color_gray_luminance(char *source_path)
      write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
 
-/*#9*/
-
 void rotate_cw(char *source_path)
 {
     int largeur, hauteur, nb_canaux;
@@ -528,8 +526,6 @@ void rotate_cw(char *source_path)
     printf("Image rotated 90° clockwise and saved as image_out.bmp\n");
 }
 
-/*#9*/
-
 void rotate_acw(char *source_path)
 {
     int largeur, hauteur, nb_canaux;
@@ -566,9 +562,14 @@ void rotate_acw(char *source_path)
         }
     }
     
-    write_image_data("image_out.bmp", rotated_data, new_width, new_height);
-    
-}
+    write_image_data("image_out.bmp", rotated_data, new_largeur, new_hauteur);
+
+    free(data);
+    free(rotated_data);
+
+    printf("Image rotated 90° anti-clockwise and saved as image_out.bmp\n");
+}  
+
 
 void mirror_horizontal(char *source_path)
 {
@@ -596,8 +597,6 @@ void mirror_horizontal(char *source_path)
  
 }
 
-/*#6*/
-
 void mirror_vertical(char *source_path)
 {
     int largeur, hauteur, nb_canaux;
@@ -623,7 +622,6 @@ void mirror_vertical(char *source_path)
     write_image_data("image_out.bmp", data, largeur, hauteur);
 }
 
-/*#5*/
 
 void mirror_total(char *source_path)
 {
@@ -663,12 +661,59 @@ void mirror_total(char *source_path)
         }
     }
     
-    write_image_data("image_out.bmp", data, width, height);
+    write_image_data("image_out.bmp", data, largeur, hauteur);
     
 }
-void scale_crop(char *source_path)
+
+void scale_crop_internal(char *source_path, int center_x, int center_y, int crop_largeur, int crop_hauteur)
 {
+    int largeur, hauteur, nb_canaux;
+    unsigned char *data;
+
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
+
+    if (nb_canaux < 3) {
+        printf("Image must have at least 3 channels\n");
+        free(data);
+        return;
+    }
+
+    unsigned char *cropped_data = calloc(crop_largeur * crop_hauteur * nb_canaux, sizeof(unsigned char));
+    if (!cropped_data) {
+        printf("Memory allocation failed\n");
+        free(data);
+        return;
+    }
+
+    int start_x = center_x - crop_largeur / 2;
+    int start_y = center_y - crop_hauteur / 2;
+
+    for (int y = 0; y < crop_hauteur; y++) {
+        for (int x = 0; x < crop_largeur; x++) {
+            int src_x = start_x + x;
+            int src_y = start_y + y;
+
+            int dst_index = (y * crop_largeur + x) * nb_canaux;
+
+            if (src_x >= 0 && src_x < largeur && src_y >= 0 && src_y < hauteur) {
+                int src_index = (src_y * largeur + src_x) * nb_canaux;
+
+                for (int c = 0; c < nb_canaux; c++) {
+                    cropped_data[dst_index + c] = data[src_index + c];
+                }
+            }
+        }
+    }
+
+    write_image_data("image_out.bmp", cropped_data, crop_largeur, crop_hauteur);
+
+    free(data);
+    free(cropped_data);
+
+    printf("Image cropped around (%d, %d) to %dx%d and saved as image_out.bmp\n", center_x, center_y, crop_largeur, crop_hauteur);
 }
+
+
 void scale_nearest(char *source_path)
 {
 }
@@ -680,9 +725,10 @@ void color_desaturate(char *source_path)
     int largeur, hauteur, nb_canaux;
     unsigned char *donnee;
     
-read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
-   
+
+    read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
     
+
     for (int i = 0; i < largeur * hauteur; i++) {
         int index = i * 3;
         
@@ -690,6 +736,7 @@ read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
         unsigned char g = donnee[index + 1];
         unsigned char b = donnee[index + 2];
         
+
         unsigned char max_val = r;
         if (g > max_val) max_val = g;
         if (b > max_val) max_val = b;
@@ -700,9 +747,11 @@ read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
         
 
         if (max_val == 0) {
+
             continue;
         }
         
+   
         unsigned char luminance = (r + g + b) / 3;
         
         float desaturation_factor = 0.5f; 
@@ -711,5 +760,6 @@ read_image_data(source_path, &donnee, &largeur, &hauteur, &nb_canaux);
         donnee[index + 1] = (unsigned char)(g * (1.0f - desaturation_factor) + luminance * desaturation_factor);
         donnee[index + 2] = (unsigned char)(b * (1.0f - desaturation_factor) + luminance * desaturation_factor);
     }
+    
     write_image_data("image_out.bmp", donnee, largeur, hauteur);
 }
