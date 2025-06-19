@@ -112,11 +112,7 @@ void max_pixel(char *source_path)
     int largeur, hauteur, canaux;
     unsigned char *donnees;
 
-    if (read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux) <= 0)
-    {
-        printf("Erreur : impossible de charger l'image %s\n", source_path);
-        return;
-    }
+    read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux);
 
     int somme_max = -1;
     int coord_x_max = 0, coord_y_max = 0;
@@ -157,11 +153,8 @@ void min_pixel(char *source_path)
     int largeur, hauteur, canaux;
     unsigned char *donnees;
 
-    if (read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux) <= 0)
-    {
-        printf("Erreur : impossible de charger l'image %s\n", source_path);
-        return;
-    }
+    read_image_data(source_path, &donnees, &largeur, &hauteur, &canaux);
+   
 
     int somme_min = 256 * 3 + 1; 
     int coord_x_min = 0, coord_y_min = 0;
