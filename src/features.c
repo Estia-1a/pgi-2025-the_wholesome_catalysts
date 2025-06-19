@@ -88,12 +88,12 @@ void second_line(char *source_path)
 
 void print_pixel(char *source_path, int x, int y) {
     unsigned char *data = NULL;
-    int width, height, nb_canaux;
+    int largeur, hauteur, nb_canaux;
     pixelRGB *pixel = NULL;
 
-    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
     
-    pixel = get_pixel(data, width, height, nb_canaux, x, y);
+    pixel = get_pixel(data, largeur, hauteur, nb_canaux, x, y);
 
     if (pixel != NULL) {
         printf("print_pixel (%d, %d): %d, %d, %d\n", x, y, pixel->R, pixel->G, pixel->B);
@@ -486,39 +486,39 @@ void color_gray_luminance(char *source_path)
 
 void rotate_cw(char *source_path)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, nb_canaux;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
 
 
-    int new_width = height;
-    int new_height = width;
+    int new_largeur = hauteur;
+    int new_hauteur = largeur;
 
-    unsigned char *rotated_data = malloc(new_width * new_height * channel_count);
+    unsigned char *rotated_data = malloc(new_largeur * new_hauteur * nb_canaux);
     if (!rotated_data) {
         printf("Memory allocation failed\n");
         free(data);
         return;
     }
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            int src_index = (y * width + x) * channel_count;
-            int dst_x = height - 1 - y;
+    for (int y = 0; y < hauteur; y++) {
+        for (int x = 0; x < largeur; x++) {
+            int src_index = (y * largeur + x) * nb_canaux;
+            int dst_x = hauteur - 1 - y;
             int dst_y = x;
-            int dst_index = (dst_y * new_width + dst_x) * channel_count;
+            int dst_index = (dst_y * new_largeur + dst_x) * nb_canaux;
 
 
 
-            for (int c = 0; c < channel_count; c++) {
+            for (int c = 0; c < nb_canaux; c++) {
                 rotated_data[dst_index + c] = data[src_index + c];
             }
         }
     }
 
 
-    write_image_data("image_out.bmp", rotated_data, new_width, new_height);
+    write_image_data("image_out.bmp", rotated_data, new_largeur, new_hauteur);
 
     free(data);
     free(rotated_data);
@@ -528,42 +528,42 @@ void rotate_cw(char *source_path)
 
 void rotate_acw(char *source_path)
 {
-    int width, height, channel_count;
+    int largeur, hauteur, nb_canaux;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &width, &height, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
 
-    if (channel_count < 3) {
+    if (nb_canaux < 3) {
         printf("Image must have at least 3 channels\n");
         free(data);
         return;
     }
 
-    int new_width = height;
-    int new_height = width;
+    int new_largeur = hauteur;
+    int new_hauteur = largeur;
 
-    unsigned char *rotated_data = malloc(new_width * new_height * channel_count);
+    unsigned char *rotated_data = malloc(new_largeur * new_hauteur * nb_canaux);
     if (!rotated_data) {
         printf("Memory allocation failed\n");
         free(data);
         return;
     }
 
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            int src_index = (y * width + x) * channel_count;
-            int dst_x = height - 1 - y;
+    for (int y = 0; y < hauteur; y++) {
+        for (int x = 0; x < largeur; x++) {
+            int src_index = (y * largeur + x) * nb_canaux;
+            int dst_x = hauteur - 1 - y;
             int dst_y = x;
-            int dst_index = (dst_y * new_width + dst_x) * channel_count;
+            int dst_index = (dst_y * new_largeur + dst_x) * nb_canaux;
 
-            for (int c = 0; c < channel_count; c++) {
+            for (int c = 0; c < nb_canaux; c++) {
                 rotated_data[dst_index + c] = data[src_index + c];
             }
         }
     }
 
 
-    write_image_data("image_out.bmp", rotated_data, new_width, new_height);
+    write_image_data("image_out.bmp", rotated_data, new_largeur, new_hauteur);
 
     free(data);
     free(rotated_data);
@@ -574,16 +574,16 @@ void rotate_acw(char *source_path)
 
 void mirror_horizontal(char *source_path)
 {
-    int width, height, nb_canaux;
+    int largeur, hauteur, nb_canaux;
     unsigned char *data;
  
-    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
  
     
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width / 2; x++) {
-            int left_index = (y * width + x) * nb_canaux;
-            int right_index = (y * width + (width - 1 - x)) * nb_canaux;
+    for (int y = 0; y < hauteur; y++) {
+        for (int x = 0; x < largeur / 2; x++) {
+            int left_index = (y * largeur + x) * nb_canaux;
+            int right_index = (y * largeur + (largeur - 1 - x)) * nb_canaux;
  
             
             for (int c = 0; c < nb_canaux; c++) {
@@ -594,22 +594,22 @@ void mirror_horizontal(char *source_path)
         }
     }
  
-    write_image_data("image_out.bmp", data, width, height);
+    write_image_data("image_out.bmp", data, largeur, hauteur);
  
 }
 
 void mirror_vertical(char *source_path)
 {
-    int width, height, nb_canaux;
+    int largeur, hauteur, nb_canaux;
     unsigned char *data;
     
-    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
     
-    for (int y = 0; y < height / 2; y++) {
-        for (int x = 0; x < width; x++) {
+    for (int y = 0; y < hauteur / 2; y++) {
+        for (int x = 0; x < largeur; x++) {
     
-            int top_index = (y * width + x) * 3;
-            int bottom_index = ((height - 1 - y) * width + (width - 1 - x)) * 3;
+            int top_index = (y * largeur + x) * 3;
+            int bottom_index = ((hauteur - 1 - y) * largeur + (largeur - 1 - x)) * 3;
             
             for (int c = 0; c < 3; c++) {
                 unsigned char temp = data[top_index + c];
@@ -620,22 +620,22 @@ void mirror_vertical(char *source_path)
     }
 
     
-    write_image_data("image_out.bmp", data, width, height);
+    write_image_data("image_out.bmp", data, largeur, hauteur);
 }
 
 
 void mirror_total(char *source_path)
 {
-    int width, height, nb_canaux;
+    int largeur, hauteur, nb_canaux;
     unsigned char *data;
     
-    read_image_data(source_path, &data, &width, &height, &nb_canaux);
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
     
-    for (int y = 0; y < height / 2; y++) {
-        for (int x = 0; x < width; x++) {
+    for (int y = 0; y < hauteur / 2; y++) {
+        for (int x = 0; x < largeur; x++) {
             
-            int top_index = (y * width + x) * 3;
-            int bottom_index = ((height - 1 - y) * width + (width - 1 - x)) * 3;
+            int top_index = (y * largeur + x) * 3;
+            int bottom_index = ((hauteur - 1 - y) * largeur + (largeur - 1 - x)) * 3;
             
             
             for (int c = 0; c < 3; c++) {
@@ -647,11 +647,11 @@ void mirror_total(char *source_path)
     }
     
     
-    if (height % 2 == 1) {
-        int middle_y = height / 2;
-        for (int x = 0; x < width / 2; x++) {
-            int left_index = (middle_y * width + x) * 3;
-            int right_index = (middle_y * width + (width - 1 - x)) * 3;
+    if (hauteur % 2 == 1) {
+        int middle_y = hauteur / 2;
+        for (int x = 0; x < largeur / 2; x++) {
+            int left_index = (middle_y * largeur + x) * 3;
+            int right_index = (middle_y * largeur + (largeur - 1 - x)) * 3;
             
             
             for (int c = 0; c < 3; c++) {
@@ -662,24 +662,24 @@ void mirror_total(char *source_path)
         }
     }
     
-    write_image_data("image_out.bmp", data, width, height);
+    write_image_data("image_out.bmp", data, largeur, hauteur);
     
 }
 
 void scale_crop_internal(char *source_path, int center_x, int center_y, int crop_largeur, int crop_hauteur)
 {
-    int largeur, hauteur, channel_count;
+    int largeur, hauteur, nb_canaux;
     unsigned char *data;
 
-    read_image_data(source_path, &data, &largeur, &hauteur, &channel_count);
+    read_image_data(source_path, &data, &largeur, &hauteur, &nb_canaux);
 
-    if (channel_count < 3) {
+    if (nb_canaux < 3) {
         printf("Image must have at least 3 channels\n");
         free(data);
         return;
     }
 
-    unsigned char *cropped_data = calloc(crop_largeur * crop_hauteur * channel_count, sizeof(unsigned char));
+    unsigned char *cropped_data = calloc(crop_largeur * crop_hauteur * nb_canaux, sizeof(unsigned char));
     if (!cropped_data) {
         printf("Memory allocation failed\n");
         free(data);
@@ -694,12 +694,12 @@ void scale_crop_internal(char *source_path, int center_x, int center_y, int crop
             int src_x = start_x + x;
             int src_y = start_y + y;
 
-            int dst_index = (y * crop_largeur + x) * channel_count;
+            int dst_index = (y * crop_largeur + x) * nb_canaux;
 
             if (src_x >= 0 && src_x < largeur && src_y >= 0 && src_y < hauteur) {
-                int src_index = (src_y * largeur + src_x) * channel_count;
+                int src_index = (src_y * largeur + src_x) * nb_canaux;
 
-                for (int c = 0; c < channel_count; c++) {
+                for (int c = 0; c < nb_canaux; c++) {
                     cropped_data[dst_index + c] = data[src_index + c];
                 }
             }
