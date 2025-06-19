@@ -552,8 +552,8 @@ void rotate_acw(char *source_path)
     for (int y = 0; y < hauteur; y++) {
         for (int x = 0; x < largeur; x++) {
             int src_index = (y * largeur + x) * nb_canaux;
-            int dst_x = hauteur - 1 - y;
-            int dst_y = x;
+            int dst_x = y;
+            int dst_y = largeur - 1 - x;
             int dst_index = (dst_y * new_largeur + dst_x) * nb_canaux;
 
             for (int c = 0; c < nb_canaux; c++) {
@@ -561,14 +561,13 @@ void rotate_acw(char *source_path)
             }
         }
     }
-
-
+    
     write_image_data("image_out.bmp", rotated_data, new_largeur, new_hauteur);
 
     free(data);
     free(rotated_data);
 
-    printf("Image rotated 90° clockwise and saved as image_out.bmp\n");
+    printf("Image rotated 90° anti-clockwise and saved as image_out.bmp\n");
 }  
 
 
