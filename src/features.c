@@ -706,11 +706,6 @@ void scale_crop_internal(char *source_path, int center_x, int center_y, int crop
     }
 
     write_image_data("image_out.bmp", cropped_data, crop_largeur, crop_hauteur);
-
-    free(data);
-    free(cropped_data);
-
-    printf("Image cropped around (%d, %d) to %dx%d and saved as image_out.bmp\n", center_x, center_y, crop_largeur, crop_hauteur);
 }
 
 
